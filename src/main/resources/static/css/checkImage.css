@@ -1,0 +1,45 @@
+#exit{
+    text-decoration: none;
+    color: rgb(153,153,153)
+}
+#exit:hover{
+    color: rgb(199,0,78);
+}
+h6 {
+    float: right;
+    margin-right: 100px;
+    font-size: 16px;
+    display: inline-block;
+    margin-top: 10px;
+}
+#top{
+    overflow: hidden;
+    background-color: #ddd;
+}
+#picture{
+    margin-left: 250px;
+}
+div#carouselExampleFade {
+    width: 600px;
+    margin-left: 400px;
+}
+.btn-primary {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+*{
+    font-family: Arial;
+    font-size: 14px;
+}
+#check {
+    margin-left: 560px;
+}
+.btn-primary:hover {
+    color: #fff;
+    background-color: #286090;
+    border-color: #204d74;
+}
+#del{
+    margin-left: 655px;
+}
