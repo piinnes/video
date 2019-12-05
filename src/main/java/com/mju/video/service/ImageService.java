@@ -17,4 +17,6 @@ public interface ImageService {
     void delImageById(Integer imgId);
 
     int selectCountByExample(Integer collectId);
+
+    Image findOne(Integer imageId);
 }

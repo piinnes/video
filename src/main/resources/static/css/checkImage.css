@@ -43,3 +43,12 @@ div#carouselExampleFade {
 #del{
     margin-left: 655px;
 }
+
+#carouselExampleFade{
+    position: relative;
+}
+.card{
+    position: absolute;
+    right: -400px;
+    top: 130px;
+}

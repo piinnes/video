@@ -19,6 +19,12 @@ public class Image {
     private Integer collectId;
     @Column(name = "create_time")
     private Date createTime;
+    @JoinTable(name = "collect")
+    @JoinColumn(name = "collect_id")
+    private Collect collect;
+    @JoinTable(name = "rabbish")
+    @JoinColumn(name = "rab_id")
+    private Rabbish rabbish;
 
     public Integer getId() {
         return id;
@@ -66,5 +72,21 @@ public class Image {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Collect getCollect() {
+        return collect;
+    }
+
+    public void setCollect(Collect collect) {
+        this.collect = collect;
+    }
+
+    public Rabbish getRabbish() {
+        return rabbish;
+    }
+
+    public void setRabbish(Rabbish rabbish) {
+        this.rabbish = rabbish;
     }
 }

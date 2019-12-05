@@ -87,4 +87,10 @@ public class ImageServiceImpl implements ImageService {
         example.createCriteria().andEqualTo("collectId", collectId);
         return imageMapper.selectCountByExample(example);
     }
+
+    @Override
+    public Image findOne(Integer imageId) {
+        Image image = imageMapper.selectByPrimaryKey(imageId);
+        return image;
+    }
 }

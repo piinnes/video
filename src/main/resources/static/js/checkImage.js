@@ -13,3 +13,25 @@ function delImage() {
         }
     });
 }
+//
+// $(function () {
+//     var imageId = $(".active img").attr('imageId');
+//     alert(imageId)
+//     $.ajax({
+//         url:"http://localhost:8080/delImage"
+//     });
+// })
+function getImage() {
+    var imageId = $(".active img").attr('imageId');
+    $.ajax({
+        url:"http://localhost:8080/getImageInfo",
+        type:"GET",
+        data:{"imageId":imageId},
+        success:function (result) {
+            alert(result.collect)
+        },
+        error:function (result) {
+
+        }
+    });
+}
