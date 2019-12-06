@@ -19,11 +19,9 @@ public class Image {
     private Integer collectId;
     @Column(name = "create_time")
     private Date createTime;
-    @JoinTable(name = "collect")
-    @JoinColumn(name = "collect_id")
+    @Transient
     private Collect collect;
-    @JoinTable(name = "rabbish")
-    @JoinColumn(name = "rab_id")
+    @Transient
     private Rabbish rabbish;
 
     public Integer getId() {

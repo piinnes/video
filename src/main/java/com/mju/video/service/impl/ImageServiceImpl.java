@@ -2,8 +2,12 @@ package com.mju.video.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.mju.video.domain.Collect;
 import com.mju.video.domain.Image;
+import com.mju.video.domain.Rabbish;
+import com.mju.video.mapper.CollectMapper;
 import com.mju.video.mapper.ImageMapper;
+import com.mju.video.mapper.RabbishMapper;
 import com.mju.video.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +23,10 @@ import java.util.List;
 public class ImageServiceImpl implements ImageService {
     @Autowired
     private ImageMapper imageMapper;
+    @Autowired
+    private CollectMapper collectMapper;
+    @Autowired
+    private RabbishMapper rabbishMapper;
     @Override
     @Transactional
     public boolean save(Image image) {
@@ -84,13 +92,17 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public int selectCountByExample(Integer collectId) {
         Example example = new Example(Image.class);
-        example.createCriteria().andEqualTo("collectId", collectId);
+        example.createCriteria().andEqualTo("collectId", collectId).andEqualTo("state",0);
         return imageMapper.selectCountByExample(example);
     }
 
     @Override
     public Image findOne(Integer imageId) {
         Image image = imageMapper.selectByPrimaryKey(imageId);
+        Collect collect = collectMapper.selectByPrimaryKey(image.getCollectId());
+        image.setCollect(collect);
+        Rabbish rabbish = rabbishMapper.selectByPrimaryKey(image.getRab_id());
+        image.setRabbish(rabbish);
         return image;
     }
 }

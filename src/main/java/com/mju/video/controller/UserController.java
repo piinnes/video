@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -33,14 +34,20 @@ public class UserController {
     @RequestMapping("/register")
     @ResponseBody
     public String register(String username,String password){
-        boolean success = false;
+        Integer findNum=0;
         if (!StringUtils.isBlank(username)&&!StringUtils.isBlank(password)){
-            success = userService.register(username,password);
+            List<User> userList = userService.findUserByUserName(username);
+            if (userList.size()==1){
+                return "用户名已存在";
+            }else {
+                findNum = userService.register(username, password);
+            }
         }
-        if (success){
+        if (findNum==1){
             return "注册成功";
+        }else{
+            return "注册失败";
         }
-        return "注册失败";
     }
 
     @RequestMapping("/logout")

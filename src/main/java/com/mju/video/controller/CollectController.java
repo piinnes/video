@@ -2,11 +2,9 @@ package com.mju.video.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.mju.video.domain.Collect;
-import com.mju.video.domain.Image;
 import com.mju.video.service.CollectService;
 import com.mju.video.service.ImageService;
 import com.mju.video.utils.Base64Util;
-import com.sun.imageio.plugins.common.ImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

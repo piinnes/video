@@ -30,14 +30,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public boolean register(String username, String password) {
+    public Integer register(String username, String password) {
         User user = new User();
         user.setUsername(username);
         user.setPassword(password);
         int effectNum = userMapper.insert(user);
-        if (effectNum>0){
-            return true;
-        }
-        return false;
+        return effectNum;
+    }
+
+    @Override
+    public List<User> findUserByUserName(String username) {
+        Example example = new Example(User.class);
+        example.createCriteria().andEqualTo("username",username);
+        List<User> userList = userMapper.selectByExample(example);
+        return userList;
     }
 }
