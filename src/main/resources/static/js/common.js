@@ -24,3 +24,32 @@ Date.prototype.Format = function (fmt) { //author: meizz
         if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
 }
+
+function zipFile(id,name) {
+    // alert(collectId)
+    if (name=="collect"){
+        $.ajax({
+            url:"http://localhost:8080/zipFile",
+            data:{"collectId":id},
+            type:"GET",
+            success:function (result) {
+                alert(result);
+            },
+            error:function (result) {
+                alert(result);
+            }
+        })
+    }else {
+        $.ajax({
+            url:"http://localhost:8080/zipFile",
+            data:{"rabbishId":id},
+            type:"GET",
+            success:function (result) {
+                alert(result);
+            },
+            error:function (result) {
+                alert(result);
+            }
+        })
+    }
+}

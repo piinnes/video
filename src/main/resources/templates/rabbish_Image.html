@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/common.js"></script>
-    <script src="js/checkImage.js"></script>
+    <script src="js/rabbishImage.js"></script>
     <link rel="stylesheet" href="css/checkImage.css">
 </head>
 <body>
@@ -15,7 +15,7 @@
     <img style="width: 43px;margin-left: 110px;" src="/images/mju.png"/><span style="font-weight: bold">计算机与控制工程学院</span>
     <h6>你好！<span style="font-size: 16px;" th:text="${session.user.username}">xxx</span><a href="/logout" id="exit">&nbsp&nbsp退出</a></h6>
     <input th:if="${#httpServletRequest.getRequestURL() eq 'http://localhost:8080/checkImagePage'} " onclick="window.location.href='/?id='+getQueryVariable('id')" class="btn btn-primary" id="picture" type="button" value="拍摄图片" />
-    <input onclick="window.location.href='/collect'" class="btn btn-primary" type="button" value="采集信息管理" />
+    <input onclick="window.location.href='/collect'" class="btn btn-primary" id="picture" type="button" value="采集信息管理" />
     <input onclick="window.location.href='/rabbish_category_list'" class="btn btn-primary" type="button" value="分类管理" />
 </div>
 <div th:if="${imageList!=null}" id="carouselExampleFade" class="carousel slide" data-interval="false" data-ride="carousel">
@@ -51,7 +51,7 @@
 <!--<input onclick="window.location.href='#'" class="btn btn-primary" type="button" value="审核不通过" />-->
 <input th:if="${imageList!=null}" onclick="delImage()" id="del" class="btn btn-primary" type="button" value="删除图片" />
 <div th:if="${imageList==null}" style="text-align: center;">
-    <h4 style="position: relative;top: 300px">暂时没有图片哦，请点击拍摄图片拍摄哦~~</h4>
+    <h4 style="position: relative;top: 300px">暂时没有图片哦，请去拍摄图片哦~~</h4>
 </div>
 </body>
 </html>

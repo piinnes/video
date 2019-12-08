@@ -46,4 +46,11 @@ table.editTable td {
 input.form-control {
     width: 290px;
 }
+#rabbishName{
+    text-decoration: none;
+    color: black;
+}
+#rabbishName:hover{
+    color: rgb(135,206,250);
+}
 

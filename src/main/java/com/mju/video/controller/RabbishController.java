@@ -86,4 +86,5 @@ public class RabbishController {
         redirectAttributes.addFlashAttribute("delerrMsg", "删除失败");
         return "redirect:/rabbish_category_list";
     }
+
 }

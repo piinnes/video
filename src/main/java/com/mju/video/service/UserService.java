@@ -10,4 +10,6 @@ public interface UserService {
     Integer register(String username, String password);
 
     List<User> findUserByUserName(String username);
+
+    void resetPassword(User user, String password);
 }

@@ -259,9 +259,9 @@ function register(){
 function forget(){
     var username = $("#forget-username").val(),
         password = $("#forget-password").val(),
-        code = $("#forget-code").val(),
-        flag = false,
-        validatecode = null;
+        // code = $("#forget-code").val(),
+        flag = false
+        // validatecode = null;
     //判断用户名密码是否为空
     if(username == ""){
         $.pt({
@@ -301,44 +301,68 @@ function forget(){
     //检查用户名是否存在
     //调后台方法
 
-    //检查注册码是否正确
-    if(code != '11111111'){
-        $.pt({
-            target: $("#forget-code"),
-            position: 'r',
-            align: 't',
-            width: 'auto',
-            height: 'auto',
-            content:"注册码不正确"
-        });
-        flag = true;
-    }
-
-
+    // //检查注册码是否正确
+    // if(code != '11111111'){
+    //     $.pt({
+    //         target: $("#forget-code"),
+    //         position: 'r',
+    //         align: 't',
+    //         width: 'auto',
+    //         height: 'auto',
+    //         content:"注册码不正确"
+    //     });
+    //     flag = true;
+    // }
 
     if(flag){
         return false;
     }else{//重置密码
-        spop({
-            template: '<h4 class="spop-title">重置密码成功</h4>即将于3秒后返回登录',
-            position: 'top-center',
-            style: 'success',
-            autoclose: 3000,
-            onOpen : function(){
-                var second = 2;
-                var showPop = setInterval(function(){
-                    if(second == 0){
-                        clearInterval(showPop);
-                    }
-                    $('.spop-body').html('<h4 class="spop-title">重置密码成功</h4>即将于'+second+'秒后返回登录');
-                    second--;
-                },1000);
+        var data = new FormData();
+        data.append("username",username);
+        data.append("password",password);
+        $.ajax({
+            url: 'http://localhost:8080/forget',
+            type: 'post',
+            contentType: false,
+            data: data,
+            processData: false,
+            success:function(info){
+                //console.log(info)
+                // alert(info)
+                if (info=="重置成功"){
+                    spop({
+                        template: '<h4 class="spop-title">重置密码成功</h4>即将于3秒后返回登录',
+                        position: 'top-center',
+                        style: 'success',
+                        autoclose: 3000,
+                        onOpen : function(){
+                            var second = 2;
+                            var showPop = setInterval(function(){
+                                if(second == 0){
+                                    clearInterval(showPop);
+                                }
+                                $('.spop-body').html('<h4 class="spop-title">重置密码成功</h4>即将于'+second+'秒后返回登录');
+                                second--;
+                            },1000);
+                        },
+                        onClose : function(){
+                            goto_login();
+                        }
+                    });
+                }else {
+                    spop({
+                        template: '<h4 class="spop-title">'+info+'</h4>',
+                        position: 'top-center',
+                        style: 'error',
+                    });
+                }
             },
-            onClose : function(){
-                goto_login();
+            error:function(err){
+                //console.log(err)
+                alert(err)
             }
-        });
-        return false;
+        })
+
     }
 }
 

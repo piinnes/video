@@ -1,6 +1,8 @@
 package com.mju.video.controller;
 
+import com.mju.video.domain.CollectImage;
 import com.mju.video.domain.Image;
+import com.mju.video.service.CollectImageService;
 import com.mju.video.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,7 +16,7 @@ import java.util.List;
 @Controller
 public class CheckImgaeController {
     @Autowired
-    private ImageService imageService;
+    private CollectImageService collectImageService;
 
     /**
      * 审核图片页面
@@ -24,8 +26,8 @@ public class CheckImgaeController {
      */
     @RequestMapping("/checkImagePage")
     public String checkImagePage(@RequestParam("id") Integer collectId, Model model){
-        List<Image> imageList = imageService.findImagesByCollectId(collectId);
-        model.addAttribute("imageList",imageList);
+        List<CollectImage> collectImageList = collectImageService.findImagesByCollectId(collectId);
+        model.addAttribute("imageList",collectImageList);
         return "/checkImage";
     }
 
@@ -39,7 +41,7 @@ public class CheckImgaeController {
     public String delImage(@RequestParam(name = "imgId") Integer imgId){
         try {
             if (imgId!=null){
-                imageService.delImageById(imgId);
+                collectImageService.delImageById(imgId);
                 }
                 return "删除成功";
         } catch (Exception e) {
@@ -50,8 +52,8 @@ public class CheckImgaeController {
 
     @RequestMapping("/getImageInfo")
     @ResponseBody
-    public Image getImageInfo(Integer imageId){
-        Image image = imageService.findOne(imageId);
-        return image;
+    public CollectImage getImageInfo(Integer imageId){
+        CollectImage collectImage = collectImageService.findOne(imageId);
+        return collectImage;
     }
 }

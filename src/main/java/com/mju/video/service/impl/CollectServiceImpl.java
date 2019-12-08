@@ -6,6 +6,7 @@ import com.mju.video.domain.Collect;
 import com.mju.video.domain.Image;
 import com.mju.video.mapper.CollectMapper;
 import com.mju.video.mapper.ImageMapper;
+import com.mju.video.service.CollectImageService;
 import com.mju.video.service.CollectService;
 import com.mju.video.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,18 +24,17 @@ public class CollectServiceImpl implements CollectService {
     @Autowired
     private CollectMapper collectMapper;
     @Autowired
-    private ImageService imageService;
+    private CollectImageService collectImageService;
     @Autowired
     private ImageMapper imageMapper;
     @Override
     public PageInfo<Collect> findAll(Integer pageNum, Integer pageSize) {
-        int count;
         PageInfo<Collect> pageInfo = null;
         try {
             PageHelper.startPage(pageNum, pageSize);
             List<Collect> collectList = collectMapper.selectAll();
             for (Collect collect : collectList) {
-                count = imageService.selectCountByExample(collect.getId());
+                int count = collectImageService.selectCountByCollectId(collect.getId());
                 collect.setCount(count);
             }
             pageInfo = new PageInfo<>(collectList);
@@ -57,23 +57,28 @@ public class CollectServiceImpl implements CollectService {
     @Override
     @Transactional
     public boolean delCollect(Integer collectId) {
-        int effNum = 0;
-        boolean isSuccess = false;
         try {
-            effNum = collectMapper.deleteByPrimaryKey(collectId);
-            isSuccess = imageService.deleteImageByCollectId(collectId);
+            collectImageService.deleteImageByCollectId(collectId);
+            collectMapper.deleteByPrimaryKey(collectId);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
-        if (effNum>0&&isSuccess){
-            return true;
-        }
-        return false;
     }
 
     @Override
     public Collect findOne(Integer collectId) {
         Collect collect = collectMapper.selectByPrimaryKey(collectId);
         return collect;
+    }
+
+    @Override
+    public void updateCollect(Collect collect) {
+        try {
+            collectMapper.updateByPrimaryKeySelective(collect);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

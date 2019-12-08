@@ -8,7 +8,18 @@ public class Rabbish {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "name")
     private String name;
+    @Transient
+    private Integer count;
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
 
     public Integer getId() {
         return id;
@@ -25,4 +36,5 @@ public class Rabbish {
     public void setName(String name) {
         this.name = name;
     }
+
 }

@@ -1,10 +1,13 @@
 package com.mju.video.service.impl;
 
 import com.mju.video.domain.Rabbish;
+import com.mju.video.domain.RabbishImage;
+import com.mju.video.mapper.RabbishImageMapper;
 import com.mju.video.mapper.RabbishMapper;
 import com.mju.video.service.RabbishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -12,9 +15,18 @@ import java.util.List;
 public class RabbishServiceImpl implements RabbishService {
     @Autowired
     private RabbishMapper rabbishMapper;
+    @Autowired
+    private RabbishImageMapper rabbishImageMapper;
     @Override
     public List<Rabbish> findAll() {
         List<Rabbish> rabbishList = rabbishMapper.selectAll();
+        for (Rabbish rabbish : rabbishList) {
+            Example example = new Example(RabbishImage.class);
+            example.createCriteria().andEqualTo("rabbishId", rabbish.getId()).andEqualTo("state", 0);
+            int count = rabbishImageMapper.selectCountByExample(example);
+            rabbish.setCount(count);
+        }
+
         return rabbishList;
     }
 

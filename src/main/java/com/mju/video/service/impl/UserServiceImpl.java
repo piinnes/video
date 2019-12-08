@@ -45,4 +45,11 @@ public class UserServiceImpl implements UserService {
         List<User> userList = userMapper.selectByExample(example);
         return userList;
     }
+
+    @Override
+    @Transactional
+    public void resetPassword(User user, String password) {
+        user.setPassword(password);
+        userMapper.updateByPrimaryKeySelective(user);
+    }
 }

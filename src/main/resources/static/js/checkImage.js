@@ -8,7 +8,8 @@ function delImage() {
             type:"POST",
             data:{"imgId":imageId},
             success:function (result) {
-                alert(result)
+                alert(result);
+                window.location.reload();
             },
             error:function (result) {
                 alert(result)
@@ -38,10 +39,10 @@ function getImage() {
             var time = result.createTime;
             var date = new Date(time)
             var body = "<div class=\"card-body\">" +
-                "<p class=\"card-text\">photo_id:"+result.id+"</p>"+
-                "<p class=\"card-text\">photo_url:D:"+result.url+"</p>"+
-                "<p class=\"card-text\">photo_createTime:"+date.Format("yyyy/MM/dd hh:mm:ss")+"</p>"+
-                "<p class=\"card-text\">photo_type:"+result.rabbish.name+"</p>";
+                "<p class=\"card-text\">photo_id:<br/>&nbsp&nbsp&nbsp&nbsp"+result.id+"</p>"+
+                "<p class=\"card-text\">photo_url:<br/>&nbsp&nbsp&nbsp&nbspD:"+result.url+"</p>"+
+                "<p class=\"card-text\">photo_createTime:<br/>&nbsp&nbsp&nbsp&nbsp"+date.Format("yyyy/MM/dd hh:mm:ss")+"</p>"+
+                "<p class=\"card-text\">photo_type:<br/>&nbsp&nbsp&nbsp&nbsp"+result.rabbish.name+"</p>";
             $(".card").append(body);
         },
         error:function (result) {
@@ -51,6 +52,7 @@ function getImage() {
 }
 
 $(function () {
+
     getImage();
     function getImage() {
         var imageId = $(".active img").attr('imageId');

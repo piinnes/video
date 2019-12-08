@@ -15,6 +15,9 @@ import java.util.List;
 
 @Controller
 public class UserController {
+    /**
+     * 登录
+     */
     @Autowired
     private UserService userService;
     @RequestMapping("/login")
@@ -31,6 +34,12 @@ public class UserController {
         return "redirect:/loginpage";
     }
 
+    /**
+     * 注册
+     * @param username
+     * @param password
+     * @return
+     */
     @RequestMapping("/register")
     @ResponseBody
     public String register(String username,String password){
@@ -50,9 +59,25 @@ public class UserController {
         }
     }
 
+    /**
+     * 退出
+     * @param session
+     * @return
+     */
     @RequestMapping("/logout")
     public String logout(HttpSession session){
         session.removeAttribute("user");
         return "/loginpage";
+    }
+
+    @RequestMapping("/forget")
+    @ResponseBody
+    public String forget(String username,String password){
+        List<User> userList = userService.findUserByUserName(username);
+        if (userList.size() > 0) {
+            userService.resetPassword(userList.get(0),password);
+            return "重置成功";
+        }
+        return "用户不存在";
     }
 }

@@ -116,19 +116,6 @@ function delCollect(id) {
     }
 }
 
-function zipFile(collectId) {
-    // alert(collectId)
-    $.ajax({
-        url:"http://localhost:8080/zipFile",
-        data:{"collectId":collectId},
-        type:"GET",
-        success:function (result) {
-            alert(result);
-        },
-        error:function (result) {
-            alert(result);
-        }
-    })
-}
+
 
 
