@@ -15,7 +15,7 @@ public class RabbishImage {
     @Column(name = "create_time")
     private Date createTime;
     @Column(name = "collect_id")
-    private String collectId;
+    private Integer collectId;
     @Column(name = "rabbish_id")
     private Integer rabbishId;
     @Transient
@@ -23,11 +23,11 @@ public class RabbishImage {
     @Transient
     private Rabbish rabbish;
 
-    public String getCollectId() {
+    public Integer getCollectId() {
         return collectId;
     }
 
-    public void setCollectId(String collectId) {
+    public void setCollectId(Integer collectId) {
         this.collectId = collectId;
     }
 

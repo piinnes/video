@@ -1,8 +1,6 @@
 package com.mju.video.interceptor;
 
 import com.mju.video.domain.Collect;
-import com.mju.video.domain.User;
-import com.mju.video.mapper.CollectMapper;
 import com.mju.video.service.CollectService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

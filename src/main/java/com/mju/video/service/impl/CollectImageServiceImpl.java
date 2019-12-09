@@ -85,13 +85,13 @@ public class CollectImageServiceImpl implements CollectImageService {
     }
 
     @Override
-    public void update(String destUrl,Integer srcCollectId, Integer destCollectId) {
+    public void update(String srcUrl,String destUrl, Integer destCollectId) {
         Example example = new Example(CollectImage.class);
-        Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("collectId", srcCollectId);
-        CollectImage collectImage = collectImageMapper.selectByPrimaryKey(srcCollectId);
+        example.createCriteria().andEqualTo("url", srcUrl);
+        List<CollectImage> collectImageList = collectImageMapper.selectByExample(example);
+        CollectImage collectImage = collectImageList.get(0);
         collectImage.setUrl(destUrl);
         collectImage.setCollectId(destCollectId);
-        collectImageMapper.updateByExample(collectImage,example);
+        collectImageMapper.updateByPrimaryKeySelective(collectImage);
     }
 }

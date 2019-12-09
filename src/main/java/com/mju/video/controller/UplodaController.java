@@ -4,7 +4,6 @@ import com.mju.video.domain.*;
 import com.mju.video.dto.Result;
 import com.mju.video.service.*;
 import com.mju.video.utils.Base64Util;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +34,8 @@ public class UplodaController {
     @ResponseBody
     public String saveBase64(@RequestParam(value = "canvas") String base64Str,
                              @RequestParam(value = "rab_id") Integer rab_id,
-                             @RequestParam(value = "collectId")Integer collectId){
+                             @RequestParam(value = "collectId")Integer collectId,
+                             @RequestParam(value = "rab_id")Integer rabbishId){
         Rabbish rabbish = rabbishService.findOne(rab_id);
         Collect collect = collectService.findOne(collectId);
         String imagePath = Base64Util.baseImagePath();
@@ -50,12 +50,14 @@ public class UplodaController {
         collectImage.setCreateTime(new Date());
         collectImage.setState(0);
         collectImage.setCollectId(collectId);
+        collectImage.setRabbishId(rabbishId);
         boolean isSuccess = collectImageService.save(collectImage);
         RabbishImage rabbishImage = new RabbishImage();
         rabbishImage.setUrl(rabbishImageUrl.substring(2));
         rabbishImage.setCreateTime(new Date());
         rabbishImage.setRabbishId(rab_id);
         rabbishImage.setState(0);
+        rabbishImage.setCollectId(collectId);
         boolean isSuccess2 = rabbishImageService.save(rabbishImage);
         if (isSuccess&&isSuccess2){
             return "保存成功";

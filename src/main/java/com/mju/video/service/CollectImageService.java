@@ -49,8 +49,7 @@ public interface CollectImageService {
 
     /**
      * 转入更新数据库
-     * @param srcCollectId
      * @param destCollectId
      */
-    void update(String destUrl,Integer srcCollectId, Integer destCollectId);
+    void update(String srcUrl,String destUrl, Integer destCollectId);
 }

@@ -63,3 +63,7 @@ div#foot {
 #collectName:hover{
     color: rgb(135,206,250);
 }
+
+.modal-title{
+    text-align: center;
+}

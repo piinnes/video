@@ -118,16 +118,21 @@ function delCollect(id) {
 
 function showModel(id){
     $('#exampleModalScrollable').modal('toggle');
-    var srccollectid = $('#exampleModalScrollable').attr("srccollectid",id);
-    selectVal(srccollectid)
+    $('#exampleModalScrollable').attr("srccollectid",id);
+    var srccollectid = $('#exampleModalScrollable').attr("srccollectid")
+    $('input[name="collectId"]').each(function(){
+        if (srccollectid==$(this).val()){
+            $(this).prop("checked",true);
+        }else {
+            $(this).prop("checked",false);
+        }
+        // console.log($(this).attr('id'))
+        // console.log(srccollectid)
+    });
 }
 
 function selectVal(srccollectid) {
-    $('input[name="collectId"]').each(function(){
-        // if (srccollectid==$(this).val())
-        //     $(this).prop("checked",true);
-        console.log($(this).attr('id')==srccollectid)
-    });
+
 }
 
 function changeTo() {
@@ -146,7 +151,21 @@ function changeTo() {
             url:'http://localhost:8080/changTo',
             data:{"destCollectId":destCollectId,"srcCollectId":srcCollectId},
             success:function (result) {
-                alert(result)
+                if (result == "转入成功") {
+                    spop({
+                        template: '<h4 class="spop-title">'+result+'</h4>',
+                        position: 'top-center',
+                        style: 'success',
+                        autoclose: 3000
+                    });
+                }else {
+                    spop({
+                        template: '<h4 class="spop-title">'+result+'</h4>',
+                        position: 'top-center',
+                        style: 'error',
+                        autoclose: 3000
+                    });
+                }
             },
             error:function (result) {
                 alert(result)

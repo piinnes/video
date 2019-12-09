@@ -2,7 +2,6 @@ package com.mju.video.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.mju.video.domain.Collect;
-import com.mju.video.domain.CollectImage;
 import com.mju.video.domain.Rabbish;
 import com.mju.video.service.CollectImageService;
 import com.mju.video.service.CollectService;
@@ -127,6 +126,9 @@ public class CollectController {
     @RequestMapping("/changTo")
     @ResponseBody
     public String changTo(Integer srcCollectId,Integer destCollectId) {
+        if (srcCollectId==destCollectId){
+            return "请选择其他采集";
+        }
         try {
             Collect srcCollect = collectService.findOne(srcCollectId);
             Collect destCollect = collectService.findOne(destCollectId);
@@ -141,7 +143,7 @@ public class CollectController {
             for (File file : files) {
                 FileUtils.forceDelete(file);
                 //更新数据库字段
-                collectImageService.update("D:/image/collect/"+destCollect.getName()+"/"+file.getName(),srcCollectId,destCollectId);
+                collectImageService.update("/image/collect/"+srcCollect.getName()+"/"+file.getName(),"/image/collect/"+destCollect.getName()+"/"+file.getName(),destCollectId);
             }
             return "转入成功";
         } catch (Exception e) {
@@ -167,7 +169,11 @@ public class CollectController {
 				  * 读写文件
 				  */
                 FileInputStream is = new FileInputStream(files);
-                FileOutputStream os = new FileOutputStream(destFile+"/"+str);
+                if (!destFile.exists()){
+                    destFile.mkdir();
+                }
+                File file = new File(destFile+"\\"+str);
+                FileOutputStream os = new FileOutputStream(file);
                 //高效流
                 BufferedInputStream bis = new BufferedInputStream(is);
                 BufferedOutputStream bos = new BufferedOutputStream(os);

@@ -1,7 +1,6 @@
 package com.mju.video.service.impl;
 
 import com.mju.video.domain.Collect;
-import com.mju.video.domain.CollectImage;
 import com.mju.video.domain.Rabbish;
 import com.mju.video.domain.RabbishImage;
 import com.mju.video.mapper.CollectMapper;
