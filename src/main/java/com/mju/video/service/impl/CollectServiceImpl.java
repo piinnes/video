@@ -81,4 +81,13 @@ public class CollectServiceImpl implements CollectService {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public List<Collect> selectAll() {
+        List<Collect> collectList = collectMapper.selectAll();
+        if (collectList!=null&&collectList.size()>0){
+            return collectList;
+        }
+        return null;
+    }
 }

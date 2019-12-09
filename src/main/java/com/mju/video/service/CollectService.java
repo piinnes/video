@@ -3,6 +3,8 @@ package com.mju.video.service;
 import com.github.pagehelper.PageInfo;
 import com.mju.video.domain.Collect;
 
+import java.util.List;
+
 public interface CollectService {
     /**
      * 采集信息列表
@@ -19,4 +21,7 @@ public interface CollectService {
     Collect findOne(Integer collectId);
 
     void updateCollect(Collect collect);
+
+    List<Collect> selectAll();
+
 }

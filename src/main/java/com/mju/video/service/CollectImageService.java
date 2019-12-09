@@ -46,4 +46,11 @@ public interface CollectImageService {
      * @return
      */
     CollectImage findOne(Integer imageId);
+
+    /**
+     * 转入更新数据库
+     * @param srcCollectId
+     * @param destCollectId
+     */
+    void update(String destUrl,Integer srcCollectId, Integer destCollectId);
 }

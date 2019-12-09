@@ -83,4 +83,15 @@ public class CollectImageServiceImpl implements CollectImageService {
         collectImage.setRabbish(rabbish);
         return collectImage;
     }
+
+    @Override
+    public void update(String destUrl,Integer srcCollectId, Integer destCollectId) {
+        Example example = new Example(CollectImage.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("collectId", srcCollectId);
+        CollectImage collectImage = collectImageMapper.selectByPrimaryKey(srcCollectId);
+        collectImage.setUrl(destUrl);
+        collectImage.setCollectId(destCollectId);
+        collectImageMapper.updateByExample(collectImage,example);
+    }
 }

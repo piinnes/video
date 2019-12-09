@@ -2,22 +2,21 @@ package com.mju.video.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.mju.video.domain.Collect;
+import com.mju.video.domain.CollectImage;
 import com.mju.video.domain.Rabbish;
+import com.mju.video.service.CollectImageService;
 import com.mju.video.service.CollectService;
-import com.mju.video.service.ImageService;
 import com.mju.video.service.RabbishService;
 import com.mju.video.utils.Base64Util;
-import com.sun.org.apache.xpath.internal.operations.Mod;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -27,6 +26,8 @@ public class CollectController {
     private CollectService collectService;
     @Autowired
     private RabbishService rabbishService;
+    @Autowired
+    private CollectImageService collectImageService;
 
     /**
      * 采集信息列表
@@ -48,7 +49,9 @@ public class CollectController {
             pageSize = 5;    //设置默认每页显示的数据数
         }
         PageInfo<Collect> pageInfo = collectService.findAll(pageNum,pageSize);
+        List<Collect> collectList = collectService.selectAll();
         model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("collectList",collectList);
         return "collect";
     }
 //    @RequestMapping("/approval")
@@ -119,6 +122,65 @@ public class CollectController {
         redirectAttributes.addFlashAttribute("delerrMsg", "删除失败");
         redirectAttributes.addFlashAttribute("id", id);
         return "redirect:/collect";
+    }
+
+    @RequestMapping("/changTo")
+    @ResponseBody
+    public String changTo(Integer srcCollectId,Integer destCollectId) {
+        try {
+            Collect srcCollect = collectService.findOne(srcCollectId);
+            Collect destCollect = collectService.findOne(destCollectId);
+            //指定源数据
+            File srcFile = new File("D:/image/collect/"+srcCollect.getName());
+            //指定目的地
+            File destFile = new File("D:/image/collect/"+destCollect.getName());
+            //调用方法
+            copyFolder(srcFile, destFile);
+            //删除源数据
+            File[] files = srcFile.listFiles();
+            for (File file : files) {
+                FileUtils.forceDelete(file);
+                //更新数据库字段
+                collectImageService.update("D:/image/collect/"+destCollect.getName()+"/"+file.getName(),srcCollectId,destCollectId);
+            }
+            return "转入成功";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "转入失败";
+    }
+
+    public static void copyFolder(File srcFile,File destFile ) throws Exception {
+        //列出全部文件
+        File[] list = srcFile.listFiles();
+        for(File files:list){
+            //获取文件名字
+            String str = files.getName();
+            //判断是目录还是文件
+            if(files.isDirectory()){
+                //指定创建路径
+                File f = new File(destFile+str);
+                //生成文件夹
+                f.mkdir();
+            }else{
+				 /*
+				  * 读写文件
+				  */
+                FileInputStream is = new FileInputStream(files);
+                FileOutputStream os = new FileOutputStream(destFile+"/"+str);
+                //高效流
+                BufferedInputStream bis = new BufferedInputStream(is);
+                BufferedOutputStream bos = new BufferedOutputStream(os);
+                int len;
+                byte[] bytes = new byte[1024];
+                while((len=bis.read(bytes)) != -1){
+                    bos.write(bytes);
+                }
+                //释放资源
+                bis.close();
+                bos.close();
+            }
+        }
     }
 
     /**
@@ -198,4 +260,6 @@ public class CollectController {
             fis.close();
 
     }
+
+
 }

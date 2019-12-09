@@ -2,6 +2,7 @@ package com.mju.video.service;
 
 import com.mju.video.domain.RabbishImage;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface RabbishImageService {
@@ -11,5 +12,5 @@ public interface RabbishImageService {
 
     RabbishImage findOne(Integer imageId);
 
-    void delectRabbishImageById(Integer imgId);
+    void delectRabbishImageById(Integer imgId) throws IOException;
 }

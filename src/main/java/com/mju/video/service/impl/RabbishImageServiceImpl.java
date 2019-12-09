@@ -1,16 +1,20 @@
 package com.mju.video.service.impl;
 
 import com.mju.video.domain.Collect;
+import com.mju.video.domain.CollectImage;
 import com.mju.video.domain.Rabbish;
 import com.mju.video.domain.RabbishImage;
 import com.mju.video.mapper.CollectMapper;
 import com.mju.video.mapper.RabbishImageMapper;
 import com.mju.video.mapper.RabbishMapper;
 import com.mju.video.service.RabbishImageService;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -52,9 +56,13 @@ public class RabbishImageServiceImpl implements RabbishImageService {
     }
 
     @Override
-    public void delectRabbishImageById(Integer imgId) {
+    public void delectRabbishImageById(Integer imgId) throws IOException {
+//        RabbishImage rabbishImage = rabbishImageMapper.selectByPrimaryKey(imgId);
+//        rabbishImage.setState(-1);
+//        rabbishImageMapper.updateByPrimaryKeySelective(rabbishImage);
         RabbishImage rabbishImage = rabbishImageMapper.selectByPrimaryKey(imgId);
-        rabbishImage.setState(-1);
-        rabbishImageMapper.updateByPrimaryKeySelective(rabbishImage);
+        File file = new File("D:"+rabbishImage.getUrl());
+        FileUtils.forceDelete(file);
+        rabbishImageMapper.deleteByPrimaryKey(imgId);
     }
 }
