@@ -1,3 +1,4 @@
+// 获取路径参数
 function getQueryVariable(variable)
 {
     var query = window.location.search.substring(1);
@@ -9,6 +10,7 @@ function getQueryVariable(variable)
     return(false);
 }
 
+// 日期格式化
 Date.prototype.Format = function (fmt) { //author: meizz
     var o = {
         "M+": this.getMonth() + 1, //月份
@@ -25,6 +27,7 @@ Date.prototype.Format = function (fmt) { //author: meizz
     return fmt;
 }
 
+//异步发送压缩请求
 function zipFile(id,name) {
     // alert(collectId)
     if (name=="collect"){
@@ -33,10 +36,29 @@ function zipFile(id,name) {
             data:{"collectId":id},
             type:"GET",
             success:function (result) {
-                alert(result);
+                if (result=="导出成功"){
+                    spop({
+                        template: '<h4 class="spop-title">'+result+'</h4>',
+                        position: 'top-center',
+                        style: 'success',
+                        autoclose: 3000
+                    });
+                }else {
+                    spop({
+                        template: '<h4 class="spop-title">'+result+'</h4>',
+                        position: 'top-center',
+                        style: 'error',
+                        autoclose: 3000
+                    });
+                }
             },
             error:function (result) {
-                alert(result);
+                spop({
+                    template: '<h4 class="spop-title">'+result+'</h4>',
+                    position: 'top-center',
+                    style: 'error',
+                    autoclose: 3000
+                });
             }
         })
     }else {
@@ -45,11 +67,29 @@ function zipFile(id,name) {
             data:{"rabbishId":id},
             type:"GET",
             success:function (result) {
-                alert(result);
+                spop({
+                    template: '<h4 class="spop-title">'+result+'</h4>',
+                    position: 'top-center',
+                    style: 'success',
+                    autoclose: 3000
+                });
             },
             error:function (result) {
-                alert(result);
+                spop({
+                    template: '<h4 class="spop-title">'+result+'</h4>',
+                    position: 'top-center',
+                    style: 'error',
+                    autoclose: 3000
+                });
             }
         })
     }
+}
+
+//判断字符串是否为空或者空格
+function isNull( str ){
+    if ( str == "" ) return true;
+    var regu = "^[ ]+$";
+    var re = new RegExp(regu);
+    return re.test(str);
 }

@@ -206,7 +206,6 @@ public class CollectController {
                         Base64Util.baseImagePath()+"collect/"+collect.getName()+".zip");
                 ZipOutputStream zipOut = new ZipOutputStream(fos);
                 File fileToZip = new File(sourceDir);
-
                 zipFile(fileToZip, fileToZip.getName(), zipOut);
                 zipOut.close();
                 fos.close();
@@ -225,7 +224,6 @@ public class CollectController {
                     Base64Util.baseImagePath()+"rabbish/"+rabbish.getName()+".zip");
             ZipOutputStream zipOut = new ZipOutputStream(fos);
             File fileToZip = new File(sourceDir);
-
             zipFile(fileToZip, fileToZip.getName(), zipOut);
             zipOut.close();
             fos.close();

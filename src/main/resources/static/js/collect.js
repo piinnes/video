@@ -35,11 +35,16 @@ $(function () {
         // });
         window.location.href='/collect?pageSize='+pageSize;
     });
+
+    // 模态框关闭时刷新页面
+    $('#exampleModalScrollable').on('hidden.bs.modal', function (e) {
+        window.location.reload();
+    })
+
 })
 
 
 function batchApproval(){
-    // alert(111);
     var data = new FormData();
     var imgIds=new Array();
     $("input[name='imgId']:checked").each(function (i) {
@@ -55,21 +60,18 @@ function batchApproval(){
             data: data ,
             processData: false,
             success:function(info){
-                //console.log(info)
-                // alert(info)
                 window.location.reload();
             },
             error:function(err){
-                //console.log(err)
                 alert(err)
             }
         });
 }
 
+
 function delImage(imgIds) {
     var data = new FormData();
     data.append("imgId",imgIds);
-    // alert(imgId)
     $.ajax({
         url: 'http://localhost:8080/delImage',
         type: 'post',
@@ -82,7 +84,6 @@ function delImage(imgIds) {
             window.location.reload();
         },
         error:function(err){
-            //console.log(err)
             alert(err)
         }
     });
@@ -100,10 +101,16 @@ function batchDel() {
     delImage(imgIds);
 }
 
+// 添加采集
 function addCollect() {
     var name = $('#name').val();
-    if (name == "") {
-        alert("采集名称不能为空");
+    if (isNull(name)) {
+        spop({
+            template: '<h4 class="spop-title">'+'采集名称不能为空'+'</h4>',
+            position: 'top-center',
+            style: 'error',
+            autoclose: 3000
+        });
         return false;
     }
     $("form").submit();
@@ -116,6 +123,7 @@ function delCollect(id) {
     }
 }
 
+// 显示模态框
 function showModel(id){
     $('#exampleModalScrollable').modal('toggle');
     $('#exampleModalScrollable').attr("srccollectid",id);
@@ -126,15 +134,10 @@ function showModel(id){
         }else {
             $(this).prop("checked",false);
         }
-        // console.log($(this).attr('id'))
-        // console.log(srccollectid)
     });
 }
 
-function selectVal(srccollectid) {
-
-}
-
+// 转入其他采集
 function changeTo() {
     var destCollectId = $('.modal-body input:checked').val();
     var srcCollectId = $('#exampleModalScrollable').attr("srccollectid");
@@ -170,7 +173,7 @@ function changeTo() {
             error:function (result) {
                 alert(result)
             }
-        })
+        });
     }
 }
 

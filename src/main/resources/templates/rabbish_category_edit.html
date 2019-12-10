@@ -12,7 +12,11 @@
 <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"-->
 <!--            integrity="sha384-L2pyEeut/H3mtgCBaUNw7KWzp5n9+4pDQiExs933/5QfaTh8YStYFFkOzSoXjlTb"-->
 <!--            crossorigin="anonymous"></script>-->
+    <link rel="stylesheet" href="css/spop.min.css" />
+    <script src="js/spop.min.js"></script>
+    <script src="js/common.js"></script>
     <link rel="stylesheet" href="css/rabbish_category_edit.css">
+    <script src="js/rabbish_category_edit.js"></script>
 </head>
 <body>
 <div id="top">
@@ -35,11 +39,11 @@
             <form th:action="@{/rabbish_category_edit}">
             <tr>
                 <td>分类名称</td>
-                <td><input th:value="${rabbish.name}" th:name="name" type="text" class="form-control"></td>
+                <td><input id="name" th:value="${rabbish.name}" th:name="name" type="text" class="form-control"></td>
             </tr>
             <tr class="submitTR">
                 <td align="center" colspan="2"><input name="id" type="hidden" th:value="${rabbish.id}">
-                    <input type="submit" class="btn btn-success" th:value="提交">
+                    <input type="button" class="btn btn-success" onclick="editRabbish()" th:value="提交">
                 </td>
                 <span style="color: red" th:text="${errMsg}"></span>
             </tr>
