@@ -25,10 +25,7 @@ public class UserController {
         User loginUser = userService.login(user);
         if (loginUser!=null){
             session.setAttribute("user", loginUser);
-            if (loginUser.getUsername().equals("admin")){
                 return "redirect:/collect";
-            }
-            return "redirect:/";
         }
         redirect.addFlashAttribute("err", "用户名或密码错误");
         return "redirect:/loginpage";

@@ -7,6 +7,7 @@ import com.mju.video.mapper.CollectMapper;
 import com.mju.video.mapper.ImageMapper;
 import com.mju.video.service.CollectImageService;
 import com.mju.video.service.CollectService;
+import com.mju.video.service.RabbishImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +22,7 @@ public class CollectServiceImpl implements CollectService {
     @Autowired
     private CollectImageService collectImageService;
     @Autowired
-    private ImageMapper imageMapper;
+    private RabbishImageService rabbishImageService;
     @Override
     public PageInfo<Collect> findAll(Integer pageNum, Integer pageSize) {
         PageInfo<Collect> pageInfo = null;
@@ -54,6 +55,7 @@ public class CollectServiceImpl implements CollectService {
     public boolean delCollect(Integer collectId) {
         try {
             collectImageService.deleteImageByCollectId(collectId);
+            rabbishImageService.delectRabbishImageByCollectId(collectId);
             collectMapper.deleteByPrimaryKey(collectId);
             return true;
         } catch (Exception e) {

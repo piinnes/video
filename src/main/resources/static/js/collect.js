@@ -116,18 +116,36 @@ function addCollect() {
     $("form").submit();
 }
 
+function ok(id){
+    var collectId = $('#alert1').attr("collectId");
+    window.location.href = "/collect_del?id="+collectId;
+    syalert.syhide(id);
+}
 function delCollect(id) {
-    var sure = confirm("确认要删除吗?");
-    if (sure) {
-        window.location.href = "/collect_del?id="+id;
-    }
+    syalert.syopen('alert1')
+    $('#alert1').attr("collectId",id);
 }
 
 // 显示模态框
 function showModel(id){
     $('#exampleModalScrollable').modal('toggle');
     $('#exampleModalScrollable').attr("srccollectid",id);
-    var srccollectid = $('#exampleModalScrollable').attr("srccollectid")
+    var srccollectid = $('#exampleModalScrollable').attr("srccollectid");
+    $.ajax({
+        url:"http://localhost:8080/getCollectInfo",
+        data:{"collectId":srccollectid},
+        success:function (result) {
+            $('.modal-title').html(result.name+"转入其他采集");
+        },
+        error:function (result) {
+            spop({
+                template: '<h4 class="spop-title">'+result+'</h4>',
+                position: 'top-center',
+                style: 'error',
+                autoclose: 3000
+            });
+        }
+    })
     $('input[name="collectId"]').each(function(){
         if (srccollectid==$(this).val()){
             $(this).prop("checked",true);

@@ -64,4 +64,11 @@ public class RabbishImageServiceImpl implements RabbishImageService {
         FileUtils.forceDelete(file);
         rabbishImageMapper.deleteByPrimaryKey(imgId);
     }
+
+    @Override
+    public void delectRabbishImageByCollectId(Integer collectId) {
+        Example example = new Example(RabbishImage.class);
+        example.createCriteria().andEqualTo("collectId", collectId);
+        rabbishImageMapper.deleteByExample(example);
+    }
 }

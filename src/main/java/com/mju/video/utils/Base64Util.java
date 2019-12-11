@@ -15,7 +15,7 @@ public class Base64Util {
 
     public static Result saveBase64(String imagePath,String base64Str){
         StringBuffer fileName = new StringBuffer();
-        SimpleDateFormat s = new SimpleDateFormat("yyyyMMddHHmmss");
+        SimpleDateFormat s = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         fileName.append(s.format(new Date()));
         if (StringUtils.isBlank(base64Str)) {
             return new Result.Builder<String>(-1,"file不可缺省").build();

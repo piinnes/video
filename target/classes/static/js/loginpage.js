@@ -241,6 +241,7 @@ function register(){
                         template: '<h4 class="spop-title">'+info+'</h4>',
                         position: 'top-center',
                         style: 'error',
+                        autoclose:3000
                     });
                 }
             },

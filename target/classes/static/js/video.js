@@ -15,7 +15,7 @@ window.addEventListener("DOMContentLoaded", function () {
             console.log("Video capture error: ", error.code);
         };
     $("#snap").click(function () { 
-        context.drawImage(video, 0, 40, 320, 240);
+        context.drawImage(video, 0, 50, 400, 300);
     })
     if (navigator.getUserMedia) {
         navigator.getUserMedia(videoObj, function (stream) {
@@ -40,9 +40,19 @@ function push() {
     //data.append("card",$("#card").val());
     //data.append("name",$("#name").val());
     if (isCanvasBlank(canvans)){
-        alert("请拍照");
+        spop({
+            template: '<h4 class="spop-title">'+'请拍照'+'</h4>',
+            position: 'top-center',
+            style: 'error',
+            autoclose:3000
+        });
     }else if ((rab_id==null)){
-        alert("请勾选所属垃圾");
+        spop({
+            template: '<h4 class="spop-title">'+'请勾选所属垃圾'+'</h4>',
+            position: 'top-center',
+            style: 'error',
+            autoclose:3000
+        });
     }else {
         data.append("rab_id",rab_id);
         data.append("canvas",imgData);
@@ -56,11 +66,23 @@ function push() {
             processData: false,
             success:function(info){
                 //console.log(info)
-                alert(info)
+                spop({
+                    template: '<h4 class="spop-title">'+info+'</h4>',
+                    position: 'top-center',
+                    style: 'success',
+                    autoclose:3000
+                });
+                // alert(info)
             },
             error:function(err){
                 //console.log(err)
-                alert(err)
+                // alert(err)
+                spop({
+                    template: '<h4 class="spop-title">'+err+'</h4>',
+                    position: 'top-center',
+                    style: 'error',
+                    autoclose:3000
+                });
             }
         });
     }

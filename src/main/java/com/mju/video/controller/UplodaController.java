@@ -39,18 +39,23 @@ public class UplodaController {
         Rabbish rabbish = rabbishService.findOne(rab_id);
         Collect collect = collectService.findOne(collectId);
         String imagePath = Base64Util.baseImagePath();
+
         String collectImagePath = imagePath +"collect/"+collect.getName() +"/";
         String rabbishImagePath = imagePath+"rabbish/" + rabbish.getName() + "/";
+
         Result collectResult = Base64Util.saveBase64(collectImagePath, base64Str);
         Result rabbishResult = Base64Util.saveBase64(rabbishImagePath, base64Str);
+
         String collectImageUrl = (String) collectResult.getData();
         String rabbishImageUrl = (String) rabbishResult.getData();
+
         CollectImage collectImage = new CollectImage();
         collectImage.setUrl(collectImageUrl.substring(2));
         collectImage.setCreateTime(new Date());
         collectImage.setState(0);
         collectImage.setCollectId(collectId);
         collectImage.setRabbishId(rabbishId);
+
         boolean isSuccess = collectImageService.save(collectImage);
         RabbishImage rabbishImage = new RabbishImage();
         rabbishImage.setUrl(rabbishImageUrl.substring(2));

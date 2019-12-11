@@ -1,5 +1,9 @@
 package com.mju.video.service.impl;
 
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.digest.DigestUtil;
+import cn.hutool.crypto.symmetric.AES;
+import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import com.mju.video.domain.User;
 import com.mju.video.mapper.UserMapper;
 import com.mju.video.service.UserService;
@@ -17,10 +21,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User login(User user) {
+        String md5Hex1 = DigestUtil.md5Hex(user.getPassword());
         Example example = new Example(User.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("username", user.getUsername());
-        criteria.andEqualTo("password", user.getPassword());
+        criteria.andEqualTo("password", md5Hex1);
         List<User> users = userMapper.selectByExample(example);
         if (users.size()!=0){
            return users.get(0);
@@ -31,9 +36,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public Integer register(String username, String password) {
+        String md5Hex1 = DigestUtil.md5Hex(password);
         User user = new User();
         user.setUsername(username);
-        user.setPassword(password);
+        user.setPassword(md5Hex1);
         int effectNum = userMapper.insert(user);
         return effectNum;
     }

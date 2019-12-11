@@ -1,5 +1,7 @@
 function delImage() {
     var isDel = confirm("是否要删除？");
+
+
     if (isDel){
         var imageId = $(".active #photo").attr("imageId");
         // alert(imageId)
@@ -8,15 +10,36 @@ function delImage() {
             type:"POST",
             data:{"imgId":imageId},
             success:function (result) {
-                alert(result);
-                window.location.reload();
+                spop({
+                    template: '<h4 class="spop-title">'+result+'</h4>',
+                    position: 'top-center',
+                    style: 'success',
+                    autoclose:3000
+                });
+                setTimeout(function (){
+                    console.log(111)
+                },3000);
             },
             error:function (result) {
-                alert(result)
+                // alert(result)
+                spop({
+                    template: '<h4 class="spop-title">'+'删除失败'+'</h4>',
+                    position: 'top-center',
+                    style: 'error',
+                    autoclose:3000
+                });
             }
         });
+
+
+
     }
 }
+
+function test(){
+    alert('test')
+}
+
 function getImage() {
     var imageId = $(".active img").attr('imageId');
     $(".card").html("");

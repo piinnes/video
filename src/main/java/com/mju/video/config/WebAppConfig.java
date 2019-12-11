@@ -13,7 +13,7 @@ public class WebAppConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**")
-                .excludePathPatterns("/loginpage","/login","/forget","/logout","/register","/css/**","/js/**","/images/**");
+                .excludePathPatterns("/loginpage","/login","/forget","/logout","/register","/css/**","/js/**","/images/**","/syalert/**");
         registry.addInterceptor(getPrivilegeInterceptor()).addPathPatterns("/");
     }
 

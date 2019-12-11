@@ -13,4 +13,6 @@ public interface RabbishImageService {
     RabbishImage findOne(Integer imageId);
 
     void delectRabbishImageById(Integer imgId) throws IOException;
+
+    void delectRabbishImageByCollectId(Integer collectId);
 }

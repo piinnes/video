@@ -8,11 +8,23 @@ function delImage() {
             type:"POST",
             data:{"imgId":imageId},
             success:function (result) {
-                alert(result);
+                // alert(result);
+                spop({
+                    template: '<h4 class="spop-title">'+result+'</h4>',
+                    position: 'top-center',
+                    style: 'success',
+                    autoclose:3000
+                });
                 window.location.reload();
             },
             error:function (result) {
-                alert(result)
+                // alert(result)
+                spop({
+                    template: '<h4 class="spop-title">'+result+'</h4>',
+                    position: 'top-center',
+                    style: 'error',
+                    autoclose:3000
+                });
             }
         });
     }

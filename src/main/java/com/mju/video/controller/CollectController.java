@@ -8,6 +8,7 @@ import com.mju.video.service.CollectService;
 import com.mju.video.service.RabbishService;
 import com.mju.video.utils.Base64Util;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -65,6 +66,18 @@ public class CollectController {
 //        redirect.addFlashAttribute("err","操作失败");
 //        return "redirect:/admin";
 //    }
+
+    /**
+     * 获取采集信息
+     * @param collectId
+     * @return
+     */
+    @RequestMapping("/getCollectInfo")
+    @ResponseBody
+    public Collect  getCollectInfo(Integer collectId){
+        Collect collect = collectService.findOne(collectId);
+        return collect;
+    }
 
     /**
      * 添加采集信息
@@ -148,13 +161,20 @@ public class CollectController {
             return "转入成功";
         } catch (Exception e) {
             e.printStackTrace();
+            String message = e.getMessage();
+            if (StringUtils.isBlank(message)){
+                return "转入失败";
+            }
+            return message;
         }
-        return "转入失败";
     }
 
     public static void copyFolder(File srcFile,File destFile ) throws Exception {
         //列出全部文件
         File[] list = srcFile.listFiles();
+        if (list==null){
+            throw new Exception("当前文件夹为空");
+        }
         for(File files:list){
             //获取文件名字
             String str = files.getName();

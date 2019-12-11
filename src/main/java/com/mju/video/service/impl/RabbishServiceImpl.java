@@ -1,9 +1,12 @@
 package com.mju.video.service.impl;
 
+import com.mju.video.domain.CollectImage;
 import com.mju.video.domain.Rabbish;
 import com.mju.video.domain.RabbishImage;
+import com.mju.video.mapper.CollectImageMapper;
 import com.mju.video.mapper.RabbishImageMapper;
 import com.mju.video.mapper.RabbishMapper;
+import com.mju.video.service.CollectImageService;
 import com.mju.video.service.RabbishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,8 @@ public class RabbishServiceImpl implements RabbishService {
     private RabbishMapper rabbishMapper;
     @Autowired
     private RabbishImageMapper rabbishImageMapper;
+    @Autowired
+    private CollectImageMapper collectImageMapper;
     @Override
     public List<Rabbish> findAll() {
         List<Rabbish> rabbishList = rabbishMapper.selectAll();
@@ -55,6 +60,12 @@ public class RabbishServiceImpl implements RabbishService {
 
     @Override
     public boolean del(Rabbish rabbish) {
+        Example example = new Example(RabbishImage.class);
+        example.createCriteria().andEqualTo("rabbishId", rabbish.getId());
+        rabbishImageMapper.deleteByExample(example);
+        Example example2 = new Example(CollectImage.class);
+        example.createCriteria().andEqualTo("rabbishId", rabbish.getId());
+        collectImageMapper.deleteByExample(example2);
         int effNum = rabbishMapper.deleteByPrimaryKey(rabbish);
         if (effNum > 0) {
             return true;
