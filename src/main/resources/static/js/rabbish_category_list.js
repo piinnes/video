@@ -13,8 +13,12 @@ function addRabbish() {
 }
 
 function delRabbish(id) {
-    var sure = confirm("确认要删除吗?");
-    if (sure) {
-        window.location.href = "/rabbish_category_del?id="+id;
-    }
+    syalert.syopen('alert1')
+    $('#alert1').attr("rabbishId",id);
+}
+
+function ok(id){
+    var rabbishId = $('#alert1').attr("rabbishId");
+    window.location.href = "/rabbish_category_del?id="+rabbishId;
+    syalert.syhide(id);
 }

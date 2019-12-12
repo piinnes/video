@@ -1,34 +1,38 @@
 function delImage() {
-    var isDel = confirm("是否要删除？");
-    if (isDel){
-        var imageId = $(".active #photo").attr("imageId");
-        // alert(imageId)
-        $.ajax({
-            url:"http://localhost:8080/delRabbishImage",
-            type:"POST",
-            data:{"imgId":imageId},
-            success:function (result) {
-                // alert(result);
-                spop({
-                    template: '<h4 class="spop-title">'+result+'</h4>',
-                    position: 'top-center',
-                    style: 'success',
-                    autoclose:3000
-                });
-                window.location.reload();
-            },
-            error:function (result) {
-                // alert(result)
-                spop({
-                    template: '<h4 class="spop-title">'+result+'</h4>',
-                    position: 'top-center',
-                    style: 'error',
-                    autoclose:3000
-                });
-            }
-        });
-    }
+    syalert.syopen('alert1')
 }
+
+
+function ok(id){
+    syalert.syhide(id);
+    var imageId = $(".active #photo").attr("imageId");
+    // alert(imageId)
+    $.ajax({
+        url:"http://localhost:8080/delRabbishImage",
+        type:"POST",
+        data:{"imgId":imageId},
+        success:function (result) {
+            // alert(result);
+            spop({
+                template: '<h4 class="spop-title">'+result+'</h4>',
+                position: 'top-center',
+                style: 'success',
+                autoclose:3000
+            });
+            window.location.reload();
+        },
+        error:function (result) {
+            // alert(result)
+            spop({
+                template: '<h4 class="spop-title">'+result+'</h4>',
+                position: 'top-center',
+                style: 'error',
+                autoclose:3000
+            });
+        }
+    });
+}
+
 function getImage() {
     var imageId = $(".active img").attr('imageId');
     $(".card").html("");

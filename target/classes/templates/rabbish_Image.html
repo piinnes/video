@@ -55,5 +55,16 @@
 <div th:if="${imageList==null}" style="text-align: center;">
     <h4 style="position: relative;top: 300px">暂时没有图片哦，请去拍摄图片哦~~</h4>
 </div>
+
+
+<!-- 确认弹窗 -->
+<div class="sy-alert animated" sy-enter="zoomIn" sy-leave="zoomOut" sy-type="confirm" sy-mask="true" id="alert1">
+    <div class="sy-title">温馨提示</div>
+    <div class="sy-content">确认要删除吗？</div>
+    <div class="sy-btn">
+        <button onClick="syalert.syhide('alert1')">取消</button>
+        <button onClick="ok('alert1')">确定</button>
+    </div>
+</div>
 </body>
 </html>
