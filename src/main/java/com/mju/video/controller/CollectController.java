@@ -37,8 +37,10 @@ public class CollectController {
      * @return
      */
     @RequestMapping("/collect")
-    public String collect(Model model, @RequestParam(required = false,defaultValue="1",value="pageNum")Integer pageNum,
-                        @RequestParam(defaultValue="5",value="pageSize")Integer pageSize){
+    public String collect(Model model,
+                          @RequestParam(required = false,defaultValue="1",value="pageNum")Integer pageNum,
+                          @RequestParam(defaultValue="5",value="pageSize")Integer pageSize,
+                          @RequestParam(required = false,value="searchName")String searchName){
         if(pageNum == null){
             pageNum = 1;   //设置默认当前页
         }
@@ -48,10 +50,20 @@ public class CollectController {
         if(pageSize == null){
             pageSize = 5;    //设置默认每页显示的数据数
         }
-        PageInfo<Collect> pageInfo = collectService.findAll(pageNum,pageSize);
-        List<Collect> collectList = collectService.selectAll();
-        model.addAttribute("pageInfo",pageInfo);
-        model.addAttribute("collectList",collectList);
+        if (searchName == null) {
+            PageInfo<Collect> pageInfo = collectService.findAll(pageNum,pageSize);
+            List<Collect> collectList = collectService.selectAll();
+            model.addAttribute("pageInfo",pageInfo);
+            model.addAttribute("collectList",collectList);
+        }else {
+            PageInfo<Collect> pageInfo = collectService.findAll(pageNum,pageSize,searchName);
+            List<Collect> collectList = collectService.selectAll();
+            model.addAttribute("pageInfo",pageInfo);
+            model.addAttribute("collectList",collectList);
+            model.addAttribute("searchName",searchName);
+            return "redirect:/collect";
+        }
+
         return "collect";
     }
 //    @RequestMapping("/approval")

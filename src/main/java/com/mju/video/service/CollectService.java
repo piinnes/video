@@ -14,6 +14,8 @@ public interface CollectService {
      */
     PageInfo<Collect> findAll(Integer pageNum, Integer pageSize);
 
+    PageInfo<Collect> findAll(Integer pageNum, Integer pageSize,String searchName);
+
     boolean addOne(Collect collect);
 
     boolean delCollect(Integer id);

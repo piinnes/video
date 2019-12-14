@@ -13,7 +13,7 @@ $(function () {
 
     $("#se").change(function () {
         // alert($('option:selected').val());
-        var pageSize = $('option:selected').val()
+        var pageSize = $('#se option:selected').val()
         // var data = new FormData();
         // data.append("pageSize",pageSize);
         // $.ajax({
@@ -135,7 +135,7 @@ function showModel(id){
         url:"http://localhost:8080/getCollectInfo",
         data:{"collectId":srccollectid},
         success:function (result) {
-            $('.modal-title').html(result.name+"转入其他采集");
+            $('.modal-title').html(result.name+"=>其他采集");
         },
         error:function (result) {
             spop({

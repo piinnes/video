@@ -67,3 +67,10 @@ div#foot {
 .modal-title{
     text-align: center;
 }
+
+.col-sm-4{
+    position: absolute;
+    right: 100px;
+    top: 50px;
+    width: 300px;
+}

@@ -11,6 +11,7 @@ import com.mju.video.service.RabbishImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,25 @@ public class CollectServiceImpl implements CollectService {
         try {
             PageHelper.startPage(pageNum, pageSize);
             List<Collect> collectList = collectMapper.selectAll();
+            for (Collect collect : collectList) {
+                int count = collectImageService.selectCountByCollectId(collect.getId());
+                collect.setCount(count);
+            }
+            pageInfo = new PageInfo<>(collectList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return pageInfo;
+    }
+
+    @Override
+    public PageInfo<Collect> findAll(Integer pageNum, Integer pageSize, String searchName) {
+        PageInfo<Collect> pageInfo = null;
+        try {
+            PageHelper.startPage(pageNum, pageSize);
+            Example example = new Example(Collect.class);
+            example.createCriteria().andLike("name","%"+searchName+"%");
+            List<Collect> collectList = collectMapper.selectByExample(example);
             for (Collect collect : collectList) {
                 int count = collectImageService.selectCountByCollectId(collect.getId());
                 collect.setCount(count);
