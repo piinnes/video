@@ -117,7 +117,6 @@
       var isDisabled = matcher.indexOf('disabled') > -1 ? true : false;
       return '<li ' + (isDisabled ? ' disabled' : ' tabindex="0"') + ' data-value="' + (value ? value[1] : '') + '" class="dropdown-option ' + (isSelected ? 'dropdown-chose' : '') + '">' + (name ? name[1] : '') + '</li>';
     });
-
     return result;
   }
 
