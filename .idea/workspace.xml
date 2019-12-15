@@ -1,22 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4c445d9c-fd09-4231-9972-ba3458bc0db4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mju/video/controller/CollectController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mju/video/controller/CollectController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mju/video/service/CollectService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mju/video/service/CollectService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mju/video/service/impl/CollectServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/mju/video/service/impl/CollectServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/jquery.dropdown.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/jquery.dropdown.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/collect.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/collect.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/rabbish_Image.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/rabbish_Image.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/mju/video/controller/CollectController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/mju/video/controller/CollectController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/mju/video/service/CollectService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/mju/video/service/CollectService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/mju/video/service/impl/CollectServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/mju/video/service/impl/CollectServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/collect.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/collect.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/rabbish_Image.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/rabbish_Image.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/video.iml" beforeDir="false" afterPath="$PROJECT_DIR$/video.iml" afterDir="false" />
-    </list>
+    <list default="true" id="4c445d9c-fd09-4231-9972-ba3458bc0db4" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/target/" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -435,7 +420,7 @@
       <workItem from="1576133712770" duration="1280000" />
       <workItem from="1576341747528" duration="339000" />
       <workItem from="1576396950449" duration="6113000" />
-      <workItem from="1576419563673" duration="3592000" />
+      <workItem from="1576419563673" duration="3909000" />
     </task>
     <task id="LOCAL-00001" summary="1133">
       <created>1575980176573</created>
@@ -465,11 +450,18 @@
       <option name="project" value="LOCAL" />
       <updated>1576342031464</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="ten11">
+      <created>1576424976265</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1576424976265</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="24321000" />
+    <option name="totallyTimeSpent" value="24638000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -569,7 +561,8 @@
     <MESSAGE value="1133" />
     <MESSAGE value="Merge branch 'master' of https://github.com/piinnes/video&#10;&#10;# Conflicts:&#10;#&#9;README.md" />
     <MESSAGE value="ten" />
-    <option name="LAST_COMMIT_MESSAGE" value="ten" />
+    <MESSAGE value="ten11" />
+    <option name="LAST_COMMIT_MESSAGE" value="ten11" />
   </component>
   <component name="WindowStateProjectService">
     <state x="351" y="204" key="#com.intellij.execution.impl.EditConfigurationsDialog" />
