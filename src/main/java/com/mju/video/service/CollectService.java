@@ -14,7 +14,6 @@ public interface CollectService {
      */
     PageInfo<Collect> findAll(Integer pageNum, Integer pageSize);
 
-    PageInfo<Collect> findAll(Integer pageNum, Integer pageSize,String searchName);
 
     boolean addOne(Collect collect);
 
@@ -26,4 +25,5 @@ public interface CollectService {
 
     List<Collect> selectAll();
 
+    PageInfo<Collect> findAllByLikeName(Integer pageNum, Integer pageSize, String searchName);
 }

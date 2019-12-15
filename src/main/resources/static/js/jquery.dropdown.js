@@ -128,9 +128,7 @@
     var name = [];
     var selectAmount = 0;
 
-    if (!data || !data.length) {
-      return false;
-    }
+    if(!data || !data.length) {  return ['',[],0]  }
 
     $.each(data, function (index, val) {
       // disable 权重高于 selected
@@ -374,6 +372,8 @@
       return false;
     },
     clearAll: function clearAll(event) {
+
+          window.location.reload()
       event.preventDefault();
       this.$choseList.find('.del').each(function (index, el) {
         $(el).trigger('click');

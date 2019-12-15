@@ -42,25 +42,6 @@ public class CollectServiceImpl implements CollectService {
     }
 
     @Override
-    public PageInfo<Collect> findAll(Integer pageNum, Integer pageSize, String searchName) {
-        PageInfo<Collect> pageInfo = null;
-        try {
-            PageHelper.startPage(pageNum, pageSize);
-            Example example = new Example(Collect.class);
-            example.createCriteria().andLike("name","%"+searchName+"%");
-            List<Collect> collectList = collectMapper.selectByExample(example);
-            for (Collect collect : collectList) {
-                int count = collectImageService.selectCountByCollectId(collect.getId());
-                collect.setCount(count);
-            }
-            pageInfo = new PageInfo<>(collectList);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return pageInfo;
-    }
-
-    @Override
     public boolean addOne(Collect collect) {
         collect.setCreateTime(new Date());
         int effNum = collectMapper.insert(collect);
@@ -106,5 +87,25 @@ public class CollectServiceImpl implements CollectService {
             return collectList;
         }
         return null;
+    }
+
+    @Override
+    public PageInfo<Collect> findAllByLikeName(Integer pageNum, Integer pageSize, String searchName) {
+
+        Example example = new Example(Collect.class);
+        example.createCriteria().andLike("name", "%"+searchName+"%");
+        PageInfo<Collect> pageInfo = null;
+        try {
+            PageHelper.startPage(pageNum, pageSize);
+            List<Collect> collectList = collectMapper.selectByExample(example);
+            for (Collect collect : collectList) {
+                int count = collectImageService.selectCountByCollectId(collect.getId());
+                collect.setCount(count);
+            }
+            pageInfo = new PageInfo<>(collectList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return pageInfo;
     }
 }
