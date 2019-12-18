@@ -93,3 +93,13 @@ function isNull( str ){
     var re = new RegExp(regu);
     return re.test(str);
 }
+
+
+function dialog(info) {
+    spop({
+        template: '<h4 class="spop-title">'+info+'</h4>',
+        position: 'top-center',
+        style: 'error',
+        autoclose: 3000
+    });
+}

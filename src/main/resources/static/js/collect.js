@@ -1,4 +1,15 @@
 $(function () {
+
+    var errMsg = $(".submitTR span").html();
+    // alert(errMsg)
+    if (!isNull(errMsg)){
+        spop({
+            template: '<h4 class="spop-title">'+errMsg+'</h4>',
+            position: 'top-center',
+            style: 'error',
+            autoclose: 3000
+        });
+    }
     $('#selectAll').on("click",function(){
         if($(this).is(':checked')){
             $('input[name="imgId"]').each(function(){

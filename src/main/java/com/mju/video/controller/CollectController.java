@@ -99,7 +99,7 @@ public class CollectController {
      */
     @RequestMapping("/getCollectInfo")
     @ResponseBody
-    public Collect  getCollectInfo(Integer collectId){
+    public Collect getCollectInfo(Integer collectId){
         Collect collect = collectService.findOne(collectId);
         return collect;
     }
@@ -112,11 +112,18 @@ public class CollectController {
      */
     @RequestMapping("collect_add")
     public String collect_add(Collect collect,Integer pageSzie,Integer pageNum,RedirectAttributes redirectAttributes){
-        boolean isSuccess = collectService.addOne(collect);
-        if (isSuccess){
-            return "redirect:/collect?pageNum="+(pageNum+1)+"&pageSize="+pageSzie;
+        Collect one = collectService.findOneByName(collect.getName());
+        if (one==null){
+            boolean isSuccess = collectService.addOne(collect);
+            if (isSuccess){
+                return "redirect:/collect?pageNum=1000"+"&pageSize="+pageSzie;
+            }
+            redirectAttributes.addFlashAttribute("errMsg", "添加失败");
+            return "redirect:/collect";
         }
-        redirectAttributes.addFlashAttribute("errMsg", "添加失败");
+        redirectAttributes.addFlashAttribute("errMsg", "采集名称已存在！");
+        redirectAttributes.addFlashAttribute("name", collect.getName());
+        redirectAttributes.addFlashAttribute("desc", collect.getDesc());
         return "redirect:/collect";
     }
 
@@ -130,7 +137,7 @@ public class CollectController {
     public String collect_editPage(Integer id, Model model){
         Collect collect = collectService.findOne(id);
         model.addAttribute("collect",collect);
-        return "/collect_edit";
+        return "collect_edit";
     }
 
     /**
@@ -139,7 +146,17 @@ public class CollectController {
      * @return
      */
     @RequestMapping("/collect_edit")
-    public String collect_edit(Collect collect){
+    public String collect_edit(Collect collect,RedirectAttributes attributes){
+        Collect collect1 = collectService.findOne(collect.getId());
+        if (collect1.getName().equals(collect.getName())){
+            collectService.updateCollect(collect);
+            return "redirect:/collect";
+        }
+        Collect one = collectService.findOneByName(collect.getName());
+        if (one !=null) {
+            attributes.addFlashAttribute("errMsg", "采集名称已存在！");
+            return "redirect:/collect_editPage?id="+collect.getId();
+        }
         collectService.updateCollect(collect);
         return "redirect:/collect";
     }

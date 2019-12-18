@@ -26,4 +26,6 @@ public interface CollectService {
     List<Collect> selectAll();
 
     PageInfo<Collect> findAllByLikeName(Integer pageNum, Integer pageSize, String searchName);
+
+    Collect findOneByName(String name);
 }

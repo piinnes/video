@@ -13,3 +13,17 @@ function editCollect() {
     $("form").submit();
 }
 
+$(function () {
+    var errMsg = $(".submitTR span").html();
+    // alert(errMsg)
+    if (!isNull(errMsg)){
+        spop({
+            template: '<h4 class="spop-title">'+errMsg+'</h4>',
+            position: 'top-center',
+            style: 'error',
+            autoclose: 3000
+        });
+    }
+})
+
+

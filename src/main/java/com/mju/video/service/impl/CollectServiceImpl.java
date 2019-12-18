@@ -108,4 +108,16 @@ public class CollectServiceImpl implements CollectService {
         }
         return pageInfo;
     }
+
+    @Override
+    public Collect findOneByName(String name) {
+        Example example = new Example(Collect.class);
+        example.createCriteria().andEqualTo("name", name);
+        List<Collect> collectList = collectMapper.selectByExample(example);
+        if (collectList!=null&&collectList.size()>0){
+            return collectList.get(0);
+
+        }
+        return null;
+    }
 }

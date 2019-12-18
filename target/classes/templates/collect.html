@@ -182,17 +182,17 @@
                         <input type="hidden" th:name="pageNum" th:value="${pageInfo.pageNum}"/>
                         <tr>
                             <td>采集名称</td>
-                            <td><input id="name" name="name" type="text" class="form-control"></td>
+                            <td><input id="name" name="name" th:value="${name}" type="text" class="form-control"></td>
                         </tr>
                         <tr>
                             <td>采集说明</td>
-                            <td><textarea style="resize:none;" id="desc" name="desc" class="form-control"></textarea>
+                            <td><textarea style="resize:none;" th:text="${desc}" id="desc" name="desc" class="form-control"></textarea>
                             </td>
                         </tr>
                         <tr class="submitTR">
                             <td align="center" colspan="2">
                                 <input type="button" onclick="addCollect()" class="btn btn-success" th:value="提交">
-                                <span style="color: red" th:text="${errMsg}"></span>
+                                <span style="color: red" hidden th:text="${errMsg}"></span>
                             </td>
                         </tr>
                     </form>

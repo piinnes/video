@@ -33,7 +33,7 @@
     <div class="panel-body">
         <table class="editTable">
             <tbody>
-            <form th:action="@{/collect_edit}">
+            <form method="post" th:action="@{/collect_edit}">
             <tr>
                 <td>采集名称</td>
                 <td><input id="name" th:value="${collect.name}" th:name="name" type="text" class="form-control"></td>
@@ -45,8 +45,8 @@
             <tr class="submitTR">
                 <td align="center" colspan="2"><input name="id" type="hidden" th:value="${collect.id}">
                     <input type="button" onclick="editCollect()" class="btn btn-success" th:value="提交">
+                    <span style="color: red" hidden th:text="${errMsg}"></span>
                 </td>
-                <span style="color: red" th:text="${errMsg}"></span>
             </tr>
             </form>
             </tbody>
