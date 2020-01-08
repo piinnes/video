@@ -6,12 +6,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class UserController {
@@ -21,14 +24,18 @@ public class UserController {
     @Autowired
     private UserService userService;
     @RequestMapping("/login")
-    public String login(User user, HttpSession session, Model model, RedirectAttributes redirect){
+    @ResponseBody
+    public Map<String,Object> login(@RequestBody User user, HttpSession session, Model model, RedirectAttributes redirect){
+        Map<String,Object> map = new HashMap<>();
         User loginUser = userService.login(user);
         if (loginUser!=null){
             session.setAttribute("user", loginUser);
-                return "redirect:/collect";
+            map.put("success", true);
+            return map;
         }
         redirect.addFlashAttribute("err", "用户名或密码错误");
-        return "redirect:/loginpage";
+        map.put("success", false);
+        return map;
     }
 
     /**

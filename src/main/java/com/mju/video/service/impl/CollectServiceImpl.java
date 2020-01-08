@@ -3,6 +3,7 @@ package com.mju.video.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mju.video.domain.Collect;
+import com.mju.video.mapper.CollectImageMapper;
 import com.mju.video.mapper.CollectMapper;
 import com.mju.video.mapper.ImageMapper;
 import com.mju.video.service.CollectImageService;
@@ -20,6 +21,8 @@ import java.util.List;
 public class CollectServiceImpl implements CollectService {
     @Autowired
     private CollectMapper collectMapper;
+    @Autowired
+    private CollectImageMapper collectImageMapper;
     @Autowired
     private CollectImageService collectImageService;
     @Autowired
@@ -84,6 +87,10 @@ public class CollectServiceImpl implements CollectService {
     public List<Collect> selectAll() {
         List<Collect> collectList = collectMapper.selectAll();
         if (collectList!=null&&collectList.size()>0){
+            for (Collect collect : collectList) {
+                int count = collectImageService.selectCountByCollectId(collect.getId());
+                collect.setCount(count);
+            }
             return collectList;
         }
         return null;
@@ -119,5 +126,19 @@ public class CollectServiceImpl implements CollectService {
 
         }
         return null;
+    }
+
+    @Override
+    public List<Collect> findByLikeName(String likeName) {
+        Example example = new Example(Collect.class);
+        example.createCriteria().andLike("name", "%"+likeName+"%");
+        List<Collect> rabbishList = collectMapper.selectByExample(example);
+        for (Collect rabbish : rabbishList) {
+            example = new Example(Collect.class);
+            example.createCriteria().andEqualTo("collectId", rabbish.getId()).andEqualTo("state", 0);
+            int count = collectImageMapper.selectCountByExample(example);
+            rabbish.setCount(count);
+        }
+        return rabbishList;
     }
 }

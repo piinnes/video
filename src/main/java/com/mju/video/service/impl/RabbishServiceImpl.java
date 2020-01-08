@@ -72,4 +72,18 @@ public class RabbishServiceImpl implements RabbishService {
         }
         return false;
     }
+
+    @Override
+    public List<Rabbish> findByLikeName(String likeName) {
+        Example example = new Example(Rabbish.class);
+        example.createCriteria().andLike("name", "%"+likeName+"%");
+        List<Rabbish> rabbishList = rabbishMapper.selectByExample(example);
+        for (Rabbish rabbish : rabbishList) {
+            example = new Example(RabbishImage.class);
+            example.createCriteria().andEqualTo("rabbishId", rabbish.getId()).andEqualTo("state", 0);
+            int count = rabbishImageMapper.selectCountByExample(example);
+            rabbish.setCount(count);
+        }
+        return rabbishList;
+    }
 }

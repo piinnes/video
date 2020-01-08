@@ -14,4 +14,6 @@ public interface RabbishService {
     boolean add(Rabbish rabbish);
 
     boolean del(Rabbish rabbish);
+
+    List<Rabbish> findByLikeName(String likeName);
 }

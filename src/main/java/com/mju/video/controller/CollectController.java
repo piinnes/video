@@ -16,7 +16,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -37,9 +42,10 @@ public class CollectController {
      * @return
      */
     @RequestMapping("/collect")
-    public String collect(Model model,
+    @ResponseBody
+    public List<Collect> collect(Model model,
                           @RequestParam(required = false,defaultValue="1",value="pageNum")Integer pageNum,
-                          @RequestParam(defaultValue="5",value="pageSize")Integer pageSize){
+                          @RequestParam(required = false,defaultValue="5",value="pageSize")Integer pageSize) throws ParseException {
         if(pageNum == null){
             pageNum = 1;   //设置默认当前页
         }
@@ -51,9 +57,13 @@ public class CollectController {
         }
             PageInfo<Collect> pageInfo = collectService.findAll(pageNum,pageSize);
             List<Collect> collectList = collectService.selectAll();
-            model.addAttribute("pageInfo",pageInfo);
-            model.addAttribute("collectList",collectList);
-        return "collect";
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        for (Collect collect: collectList){
+//            String format = simpleDateFormat.format(collect.getCreateTime());
+//            Date parse = simpleDateFormat.parse(format);
+//            collect.setCreateTime(parse);
+//        }
+            return collectList;
     }
 //    @RequestMapping("/approval")
 //    public String approval(@RequestParam(name = "imgId") Integer[] imgId, RedirectAttributes redirect){
@@ -69,6 +79,7 @@ public class CollectController {
 //    }
 
     @RequestMapping("/search")
+    @ResponseBody
     public String search(Model model,
                           @RequestParam(required = false,defaultValue="1",value="pageNum")Integer pageNum,
                           @RequestParam(defaultValue="5",value="pageSize")Integer pageSize,
@@ -111,20 +122,18 @@ public class CollectController {
      * @return
      */
     @RequestMapping("collect_add")
-    public String collect_add(Collect collect,Integer pageSzie,Integer pageNum,RedirectAttributes redirectAttributes){
+    @ResponseBody
+    public Map<String,Object> collect_add(@RequestBody Collect collect,Integer pageSzie,Integer pageNum,RedirectAttributes redirectAttributes){
+        Map<String,Object> map = new HashMap<>();
         Collect one = collectService.findOneByName(collect.getName());
         if (one==null){
             boolean isSuccess = collectService.addOne(collect);
-            if (isSuccess){
-                return "redirect:/collect?pageNum=1000"+"&pageSize="+pageSzie;
-            }
-            redirectAttributes.addFlashAttribute("errMsg", "添加失败");
-            return "redirect:/collect";
+            map.put("success", isSuccess);
+            return map;
         }
-        redirectAttributes.addFlashAttribute("errMsg", "采集名称已存在！");
-        redirectAttributes.addFlashAttribute("name", collect.getName());
-        redirectAttributes.addFlashAttribute("desc", collect.getDesc());
-        return "redirect:/collect";
+        map.put("success", false);
+        map.put("errMsg", "采集名称已存在！");
+        return map;
     }
 
     /**
@@ -133,11 +142,11 @@ public class CollectController {
      * @param model
      * @return
      */
-    @RequestMapping("/collect_editPage")
-    public String collect_editPage(Integer id, Model model){
+    @RequestMapping("/collect_getInfo")
+    @ResponseBody
+    public Collect collect_editPage(Integer id, Model model){
         Collect collect = collectService.findOne(id);
-        model.addAttribute("collect",collect);
-        return "collect_edit";
+        return collect;
     }
 
     /**
@@ -146,19 +155,24 @@ public class CollectController {
      * @return
      */
     @RequestMapping("/collect_edit")
-    public String collect_edit(Collect collect,RedirectAttributes attributes){
+    @ResponseBody
+    public Map<String,Object> collect_edit(@RequestBody Collect collect,RedirectAttributes attributes){
+        Map<String,Object> map = new HashMap<>();
         Collect collect1 = collectService.findOne(collect.getId());
         if (collect1.getName().equals(collect.getName())){
             collectService.updateCollect(collect);
-            return "redirect:/collect";
+            map.put("success", true);
+            return map;
         }
         Collect one = collectService.findOneByName(collect.getName());
         if (one !=null) {
-            attributes.addFlashAttribute("errMsg", "采集名称已存在！");
-            return "redirect:/collect_editPage?id="+collect.getId();
+            map.put("success", false);
+            map.put("errMsg", "采集名称已存在！");
+            return map;
         }
         collectService.updateCollect(collect);
-        return "redirect:/collect";
+        map.put("success", true);
+        return map;
     }
 
     /**
@@ -168,14 +182,12 @@ public class CollectController {
      * @return
      */
     @RequestMapping("collect_del")
-    public String collect_del(Integer id, RedirectAttributes redirectAttributes){
+    @ResponseBody
+    public Map<String,Object> collect_del(Integer id, RedirectAttributes redirectAttributes){
+        Map<String,Object> map = new HashMap<>();
         boolean isSuccess = collectService.delCollect(id);
-        if (isSuccess){
-            return "redirect:/collect";
-        }
-        redirectAttributes.addFlashAttribute("delerrMsg", "删除失败");
-        redirectAttributes.addFlashAttribute("id", id);
-        return "redirect:/collect";
+        map.put("success",isSuccess);
+        return map;
     }
 
     @RequestMapping("/changTo")
@@ -209,6 +221,18 @@ public class CollectController {
             }
             return message;
         }
+    }
+
+    /**
+     * 模糊搜索
+     * @param likeName
+     * @return
+     */
+    @RequestMapping("/collect_like_name")
+    @ResponseBody
+    public List<Collect> rabbish_category_like(String likeName){
+        List<Collect> collectList = collectService.findByLikeName(likeName);
+        return collectList;
     }
 
     public static void copyFolder(File srcFile,File destFile ) throws Exception {

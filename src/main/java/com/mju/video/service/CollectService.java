@@ -28,4 +28,6 @@ public interface CollectService {
     PageInfo<Collect> findAllByLikeName(Integer pageNum, Integer pageSize, String searchName);
 
     Collect findOneByName(String name);
+
+    List<Collect> findByLikeName(String likeName);
 }

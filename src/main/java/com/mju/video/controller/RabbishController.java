@@ -5,10 +5,14 @@ import com.mju.video.service.RabbishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class RabbishController {
@@ -20,10 +24,10 @@ public class RabbishController {
      * @return
      */
     @RequestMapping("/rabbish_category_list")
-    public String rabbish_category_list(Model model){
+    @ResponseBody
+    public List<Rabbish> rabbish_category_list(Model model){
         List<Rabbish> rabbishList = rabbishService.findAll();
-        model.addAttribute("rabbishList",rabbishList);
-        return "rabbish_category_list";
+        return rabbishList;
     }
 
     /**
@@ -32,11 +36,11 @@ public class RabbishController {
      * @param model
      * @return
      */
-    @RequestMapping("/rabbish_category_editPage")
-    public String rabbish_category_editPage(Integer id,Model model){
+    @RequestMapping("/rabbish_category_getInfo")
+    @ResponseBody
+    public Rabbish rabbish_category_editPage(Integer id,Model model){
         Rabbish rabbish = rabbishService.findOne(id);
-        model.addAttribute("rabbish", rabbish);
-        return "rabbish_category_edit";
+        return rabbish;
     }
 
     /**
@@ -46,13 +50,12 @@ public class RabbishController {
      * @return
      */
     @RequestMapping("/rabbish_category_edit")
-    public String rabbish_category_edit(Rabbish rabbish, RedirectAttributes redirectAttributes){
+    @ResponseBody
+    public Map<String,Object> rabbish_category_edit(@RequestBody Rabbish rabbish, RedirectAttributes redirectAttributes){
+        Map<String,Object> map = new HashMap<>();
         boolean isSuccess = rabbishService.updateRabbish(rabbish);
-        if (isSuccess){
-            return "redirect:/rabbish_category_list";
-        }
-        redirectAttributes.addFlashAttribute("errMsg", "更新失败");
-        return "redirect:/rabbish_category_editPage";
+        map.put("success",isSuccess);
+        return map;
     }
 
     /**
@@ -62,14 +65,13 @@ public class RabbishController {
      * @return
      */
     @RequestMapping("/rabbish_category_add")
-    public String rabbish_category_add(Rabbish rabbish, RedirectAttributes redirectAttributes){
+    @ResponseBody
+    public Map<String,Object> rabbish_category_add(@RequestBody Rabbish rabbish, RedirectAttributes redirectAttributes){
+        Map<String,Object> map = new HashMap<>();
         boolean isSuccess = rabbishService.add(rabbish);
-        if (isSuccess){
-            return "redirect:/rabbish_category_list";
+            map.put("success",isSuccess);
+            return map;
         }
-        redirectAttributes.addFlashAttribute("errMsg", "添加失败");
-        return "redirect:/rabbish_category_list";
-    }
 
     /**
      * 类别管理页面删除类别
@@ -78,13 +80,24 @@ public class RabbishController {
      * @return
      */
     @RequestMapping("/rabbish_category_del")
-    public String rabbish_category_del(Rabbish rabbish, RedirectAttributes redirectAttributes){
+    @ResponseBody
+    public Map<String,Object> rabbish_category_del(@RequestBody Rabbish rabbish, RedirectAttributes redirectAttributes){
+        Map<String,Object> map = new HashMap<>();
         boolean isSuccess = rabbishService.del(rabbish);
-        if (isSuccess){
-            return "redirect:/rabbish_category_list";
-        }
-        redirectAttributes.addFlashAttribute("delerrMsg", "删除失败");
-        return "redirect:/rabbish_category_list";
+        map.put("success",isSuccess);
+        return map;
+    }
+
+    /**
+     * 模糊搜索
+     * @param likeName
+     * @return
+     */
+    @RequestMapping("/rabbish_category_like_name")
+    @ResponseBody
+    public List<Rabbish> rabbish_category_like( String likeName){
+        List<Rabbish> rabbishList = rabbishService.findByLikeName(likeName);
+        return rabbishList;
     }
 
 }
