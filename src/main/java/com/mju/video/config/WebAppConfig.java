@@ -12,22 +12,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebAppConfig implements WebMvcConfigurer {
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**")
-//                .excludePathPatterns("/loginpage","/login","/forget","/logout","/register","/css/**","/js/**","/images/**","/syalert/**");
-//        registry.addInterceptor(getPrivilegeInterceptor()).addPathPatterns("/");
-//    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/image/**").addResourceLocations("file:/D:/image/");
     }
-
-//    @Bean
-//    public privilegeInterceptor getPrivilegeInterceptor(){
-//        return new privilegeInterceptor();
-//    }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {

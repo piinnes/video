@@ -1,12 +1,14 @@
 package com.mju.video.controller;
 
 import cn.hutool.core.codec.Base64;
-import com.mju.video.domain.RabbishImage;
-import com.mju.video.service.RabbishImageService;
+import com.mju.video.domain.CollectImage;
+import com.mju.video.service.CollectImageService;
 import com.mju.video.utils.Base64Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.File;
@@ -17,32 +19,27 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-public class RabbishImageController {
+public class CollectImgaeController {
     @Autowired
-    private RabbishImageService rabbishImageService;
+    private CollectImageService collectImageService;
+
     /**
-     * 获取该垃圾类别图片
-     * @param id
+     * 审核图片页面
+     * @param collectId
      * @return
-     * @throws Exception
      */
-    @RequestMapping("/getRabbishImageList")
+    @RequestMapping("/getCollectImageList")
     @ResponseBody
-    public Map<String,Object> getRabbishImage(Integer id) throws Exception {
+    public Map<String,Object> getCollectImageList(Integer collectId) throws Exception{
         Map<String,Object> map = new HashMap<>();
         Map<String,Object> temp = null;
-        List<RabbishImage> rabbishImageList = rabbishImageService.findAllByRabbishId(id);
-        if (rabbishImageList!=null&&rabbishImageList.size()>0){
+        List<CollectImage> collectImageList = collectImageService.findImagesByCollectId(collectId);
+        if (collectImageList!=null&&collectImageList.size()>0){
             List<Map<String,Object>> encodeList = new ArrayList<>();
-//        FileInputStream fis = null;
-//        for (RabbishImage item : rabbishImageList){
-//            fis = new FileInputStream("D:"+item.getUrl());
-//            System.out.println(fis);
-//        }
             File file = null;
             FileInputStream fis = null;
             byte[] date = null;
-            for (RabbishImage item : rabbishImageList){
+            for (CollectImage item : collectImageList){
                 temp = new HashMap<>();
                 if (Base64Util.isWin()){
                     file = new File("D:"+item.getUrl());
@@ -67,25 +64,18 @@ public class RabbishImageController {
     }
 
     /**
-     * 获取该垃圾图片的信息
-     * @param imageId
+     * 删除图片
+     * @param imgId
      * @return
      */
-    @RequestMapping("/getRabbishImageInfo")
+    @RequestMapping("/delCollectImage")
     @ResponseBody
-    public RabbishImage getRabbishImageInfo(Integer imageId){
-        RabbishImage rabbishImage = rabbishImageService.findOne(imageId);
-        return rabbishImage;
-    }
-
-    @RequestMapping("/delRabbishImage")
-    @ResponseBody
-    public Map<String,Object> delRabbishImage(Integer imgId){
+    public Map<String,Object> delImage(Integer imgId){
         Map<String,Object> map = new HashMap<>();
         try {
             if (imgId!=null){
-                rabbishImageService.delectRabbishImageById(imgId);
-            }
+                collectImageService.delImageById(imgId);
+                }
             map.put("success", true);
             map.put("msg","删除成功");
             return map;
@@ -95,5 +85,12 @@ public class RabbishImageController {
         map.put("success", false);
         map.put("msg","删除失败");
         return map;
+    }
+
+    @RequestMapping("/getImageInfo")
+    @ResponseBody
+    public CollectImage getImageInfo(Integer imageId){
+        CollectImage collectImage = collectImageService.findOne(imageId);
+        return collectImage;
     }
 }

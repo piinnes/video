@@ -2,11 +2,11 @@ package com.mju.video.domain;
 
 import javax.persistence.*;
 
-@Table(name = "rabbish")
+@Table(name = "rubbish")
 public class Rabbish {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "JDBC")
     private Integer id;
     @Column(name = "name")
     private String name;

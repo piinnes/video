@@ -6,11 +6,14 @@ import com.mju.video.service.*;
 import com.mju.video.utils.Base64Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Controller
@@ -26,48 +29,57 @@ public class UplodaController {
 
     /**
      * 拍摄图片页面上传图片
-     * @param base64Str
-     * @param rab_id
+     * @param upload
      * @return
      */
     @RequestMapping("/upload")
     @ResponseBody
-    public String saveBase64(@RequestParam(value = "canvas") String base64Str,
-                             @RequestParam(value = "rab_id") Integer rab_id,
-                             @RequestParam(value = "collectId")Integer collectId,
-                             @RequestParam(value = "rab_id")Integer rabbishId){
-        Rabbish rabbish = rabbishService.findOne(rab_id);
-        Collect collect = collectService.findOne(collectId);
+    public Map<String,Object> saveBase64(@RequestBody Upload upload){
+
+        Map<String,Object> map = new HashMap<>();
+        Rabbish rabbish = rabbishService.findOne(upload.getRab_id());
+        Collect collect = collectService.findOne(upload.getCollectId());
         String imagePath = Base64Util.baseImagePath();
+        boolean isSuccess = true;
+        if(collect!=null){
+            String collectImagePath = imagePath +"collect/"+collect.getId() +"/";
+            Result collectResult = Base64Util.saveBase64(collectImagePath, upload.getBase64Str());
+            String collectImageUrl = (String) collectResult.getData();
 
-        String collectImagePath = imagePath +"collect/"+collect.getName() +"/";
-        String rabbishImagePath = imagePath+"rabbish/" + rabbish.getName() + "/";
-
-        Result collectResult = Base64Util.saveBase64(collectImagePath, base64Str);
-        Result rabbishResult = Base64Util.saveBase64(rabbishImagePath, base64Str);
-
-        String collectImageUrl = (String) collectResult.getData();
+            CollectImage collectImage = new CollectImage();
+            if (Base64Util.isWin()){
+                collectImage.setUrl(collectImageUrl.substring(2));
+            }else {
+                collectImage.setUrl(collectImageUrl);
+            }
+            collectImage.setCreateTime(new Date());
+            collectImage.setState(0);
+            collectImage.setCollectId(upload.getCollectId());
+            collectImage.setRabbishId(upload.getRab_id());
+            isSuccess = collectImageService.save(collectImage);
+        }
+        String rabbishImagePath = imagePath+"rubbish/" + rabbish.getId() + "/";
+        Result rabbishResult = Base64Util.saveBase64(rabbishImagePath, upload.getBase64Str());
         String rabbishImageUrl = (String) rabbishResult.getData();
 
-        CollectImage collectImage = new CollectImage();
-        collectImage.setUrl(collectImageUrl.substring(2));
-        collectImage.setCreateTime(new Date());
-        collectImage.setState(0);
-        collectImage.setCollectId(collectId);
-        collectImage.setRabbishId(rabbishId);
-
-        boolean isSuccess = collectImageService.save(collectImage);
         RabbishImage rabbishImage = new RabbishImage();
-        rabbishImage.setUrl(rabbishImageUrl.substring(2));
-        rabbishImage.setCreateTime(new Date());
-        rabbishImage.setRabbishId(rab_id);
-        rabbishImage.setState(0);
-        rabbishImage.setCollectId(collectId);
-        boolean isSuccess2 = rabbishImageService.save(rabbishImage);
-        if (isSuccess&&isSuccess2){
-            return "保存成功";
+        if (Base64Util.isWin()){
+            rabbishImage.setUrl(rabbishImageUrl.substring(2));
+        }else {
+            rabbishImage.setUrl(rabbishImageUrl);
         }
-        return "保存失败";
+        rabbishImage.setCreateTime(new Date());
+        rabbishImage.setRabbishId(upload.getRab_id());
+        rabbishImage.setState(0);
+        rabbishImage.setCollectId(upload.getCollectId());
+        boolean isSuccess2 = rabbishImageService.save(rabbishImage);
+
+        if (isSuccess&&isSuccess2){
+            map.put("success", true);
+            return map;
+        }
+        map.put("success", false);
+        return map;
     }
 
 

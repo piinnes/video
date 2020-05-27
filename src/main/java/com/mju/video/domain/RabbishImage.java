@@ -3,7 +3,7 @@ package com.mju.video.domain;
 import javax.persistence.*;
 import java.util.Date;
 
-@Table(name = "rabbish_img")
+@Table(name = "rubbish_img")
 public class RabbishImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +16,7 @@ public class RabbishImage {
     private Date createTime;
     @Column(name = "collect_id")
     private Integer collectId;
-    @Column(name = "rabbish_id")
+    @Column(name = "rubbish_id")
     private Integer rabbishId;
     @Transient
     private Collect collect;

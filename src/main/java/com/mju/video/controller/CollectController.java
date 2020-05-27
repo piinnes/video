@@ -5,20 +5,19 @@ import com.mju.video.domain.Collect;
 import com.mju.video.domain.Rabbish;
 import com.mju.video.service.CollectImageService;
 import com.mju.video.service.CollectService;
+import com.mju.video.service.RabbishImageService;
 import com.mju.video.service.RabbishService;
 import com.mju.video.utils.Base64Util;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,19 +32,20 @@ public class CollectController {
     private RabbishService rabbishService;
     @Autowired
     private CollectImageService collectImageService;
+    @Autowired
+    private RabbishImageService rabbishImageService;
 
     /**
-     * 采集信息列表
-     * @param model
+     * 采集信息列表分页
      * @param pageNum
      * @param pageSize
      * @return
      */
     @RequestMapping("/collect")
     @ResponseBody
-    public List<Collect> collect(Model model,
+    public PageInfo<Collect> collect(
                           @RequestParam(required = false,defaultValue="1",value="pageNum")Integer pageNum,
-                          @RequestParam(required = false,defaultValue="5",value="pageSize")Integer pageSize) throws ParseException {
+                          @RequestParam(required = false,defaultValue="10",value="pageSize")Integer pageSize) throws ParseException {
         if(pageNum == null){
             pageNum = 1;   //设置默认当前页
         }
@@ -53,17 +53,17 @@ public class CollectController {
             pageNum = 1;
         }
         if(pageSize == null){
-            pageSize = 5;    //设置默认每页显示的数据数
+            pageSize = 10;    //设置默认每页显示的数据数
         }
             PageInfo<Collect> pageInfo = collectService.findAll(pageNum,pageSize);
-            List<Collect> collectList = collectService.selectAll();
+//            List<Collect> collectList = collectService.selectAll();
 //        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 //        for (Collect collect: collectList){
 //            String format = simpleDateFormat.format(collect.getCreateTime());
 //            Date parse = simpleDateFormat.parse(format);
 //            collect.setCreateTime(parse);
 //        }
-            return collectList;
+            return pageInfo;
     }
 //    @RequestMapping("/approval")
 //    public String approval(@RequestParam(name = "imgId") Integer[] imgId, RedirectAttributes redirect){
@@ -77,6 +77,17 @@ public class CollectController {
 //        redirect.addFlashAttribute("err","操作失败");
 //        return "redirect:/admin";
 //    }
+
+    /**
+     * 采集信息列表
+     * @return
+     */
+    @RequestMapping("/CollectList")
+    @ResponseBody
+    public List<Collect> getCollectList(){
+            List<Collect> collectList = collectService.selectAll();
+        return collectList;
+    }
 
     @RequestMapping("/search")
     @ResponseBody
@@ -190,19 +201,24 @@ public class CollectController {
         return map;
     }
 
+
+    /**
+     * 转入采集信息
+     * @param srcCollectId
+     * @param destCollectId
+     * @return
+     */
     @RequestMapping("/changTo")
     @ResponseBody
-    public String changTo(Integer srcCollectId,Integer destCollectId) {
-        if (srcCollectId==destCollectId){
-            return "请选择其他采集";
-        }
+    public Map<String,Object> changTo(Integer srcCollectId,Integer destCollectId) {
+        Map<String,Object> map = new HashMap<>();
         try {
             Collect srcCollect = collectService.findOne(srcCollectId);
             Collect destCollect = collectService.findOne(destCollectId);
             //指定源数据
-            File srcFile = new File("D:/image/collect/"+srcCollect.getName());
+            File srcFile = new File(Base64Util.baseImagePath()+"collect/"+srcCollect.getId());
             //指定目的地
-            File destFile = new File("D:/image/collect/"+destCollect.getName());
+            File destFile = new File(Base64Util.baseImagePath()+"collect/"+destCollect.getId());
             //调用方法
             copyFolder(srcFile, destFile);
             //删除源数据
@@ -210,34 +226,41 @@ public class CollectController {
             for (File file : files) {
                 FileUtils.forceDelete(file);
                 //更新数据库字段
-                collectImageService.update("/image/collect/"+srcCollect.getName()+"/"+file.getName(),"/image/collect/"+destCollect.getName()+"/"+file.getName(),destCollectId);
+                if (Base64Util.isWin()){
+                    collectImageService.update("/image/collect/"+srcCollect.getId()+"/"+file.getName(),"/image/collect/"+destCollect.getId()+"/"+file.getName(),destCollectId);
+                    rabbishImageService.update(srcCollectId,destCollectId);
+                }else {
+                    collectImageService.update(Base64Util.baseImagePath()+"collect/"+srcCollect.getId()+"/"+file.getName(),Base64Util.baseImagePath()+"collect/"+destCollect.getId()+"/"+file.getName(),destCollectId);
+                    rabbishImageService.update(srcCollectId,destCollectId);
+                }
+
             }
-            return "转入成功";
+            map.put("success",true);
+            map.put("msg","转入成功");
+            return map;
         } catch (Exception e) {
             e.printStackTrace();
-            String message = e.getMessage();
-            if (StringUtils.isBlank(message)){
-                return "转入失败";
-            }
-            return message;
+            map.put("success",false);
+            map.put("msg","转入失败");
+            return map;
         }
     }
 
     /**
      * 模糊搜索
-     * @param likeName
      * @return
      */
-    @RequestMapping("/collect_like_name")
+    @RequestMapping("/collectByCondition")
     @ResponseBody
-    public List<Collect> rabbish_category_like(String likeName){
-        List<Collect> collectList = collectService.findByLikeName(likeName);
-        return collectList;
+    public PageInfo<Collect> getCollectByCondition(@RequestParam(required = false,defaultValue="1",value="pageNum")Integer pageNum,
+                                               @RequestParam(required = false,defaultValue="10",value="pageSize")Integer pageSize,String name,long[] timestamp,Integer operate,Integer total){
+        PageInfo<Collect> pageInfo = collectService.getCollectByCondition(pageNum, pageSize, name, timestamp, operate, total);
+        return pageInfo;
     }
 
     public static void copyFolder(File srcFile,File destFile ) throws Exception {
         //列出全部文件
-        File[] list = srcFile.listFiles();
+              File[] list = srcFile.listFiles();
         if (list==null){
             throw new Exception("当前文件夹为空");
         }
@@ -279,45 +302,53 @@ public class CollectController {
      * 压缩采集信息文件夹
      * @throws Exception
      */
-    @GetMapping("/zipFile")
+    @RequestMapping(value = "/zipFile")
     @ResponseBody
-    public String zipFile(Integer collectId,Integer rabbishId) throws Exception {
+    public void zipFile(HttpServletResponse response,Integer collectId,Integer rabbishId) throws Exception {
+        Map<String,Object> map = new HashMap<>();
         if (collectId!=null){
             Collect collect = collectService.findOne(collectId);
             //这个是文件夹的绝对路径，如果想要相对路径就自行了解写法
-            String sourceDir = Base64Util.baseImagePath()+"collect/" + collect.getName();
+            String sourceDir = Base64Util.baseImagePath()+"collect/" + collect.getId();
             //这个是压缩之后的文件绝对路径
             try {
                 FileOutputStream fos = new FileOutputStream(
-                        Base64Util.baseImagePath()+"collect/"+collect.getName()+".zip");
+                        Base64Util.baseImagePath()+"collect/"+collect.getId()+".zip");
                 ZipOutputStream zipOut = new ZipOutputStream(fos);
                 File fileToZip = new File(sourceDir);
-                zipFile(fileToZip, fileToZip.getName(), zipOut);
+                zipFile(fileToZip, collect.getName(), zipOut);
                 zipOut.close();
                 fos.close();
+                // 把压缩文件流返回到前端
+                InputStream inputData = new FileInputStream(Base64Util.baseImagePath()+"collect/"+collect.getId()+".zip");
+                com.mju.video.utils.FileUtils.downloadFile(response,collect.getName(),inputData);
+                File file = new File(Base64Util.baseImagePath()+"collect/"+collect.getId()+".zip");
+                FileUtils.forceDelete(file);
             } catch (Exception e) {
                 e.printStackTrace();
-                return "导出失败";
             }
-            return "导出成功";
+        }else {
+            Rabbish rabbish = rabbishService.findOne(rabbishId);
+            //这个是文件夹的绝对路径，如果想要相对路径就自行了解写法
+            String sourceDir = Base64Util.baseImagePath()+"rubbish/" + rabbish.getId();
+            //这个是压缩之后的文件绝对路径
+            try {
+                FileOutputStream fos = new FileOutputStream(
+                        Base64Util.baseImagePath()+"rubbish/"+rabbish.getId()+".zip");
+                ZipOutputStream zipOut = new ZipOutputStream(fos);
+                File fileToZip = new File(sourceDir);
+                zipFile(fileToZip, rabbish.getName(), zipOut);
+                zipOut.close();
+                fos.close();
+                // 把压缩文件流返回到前端
+                InputStream inputData = new FileInputStream(Base64Util.baseImagePath()+"rubbish/"+rabbish.getId()+".zip");
+                com.mju.video.utils.FileUtils.downloadFile(response,rabbish.getName(),inputData);
+                File file = new File(Base64Util.baseImagePath()+"rubbish/"+rabbish.getId()+".zip");
+                FileUtils.forceDelete(file);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        Rabbish rabbish = rabbishService.findOne(rabbishId);
-        //这个是文件夹的绝对路径，如果想要相对路径就自行了解写法
-        String sourceDir = Base64Util.baseImagePath()+"rabbish/" + rabbish.getName();
-        //这个是压缩之后的文件绝对路径
-        try {
-            FileOutputStream fos = new FileOutputStream(
-                    Base64Util.baseImagePath()+"rabbish/"+rabbish.getName()+".zip");
-            ZipOutputStream zipOut = new ZipOutputStream(fos);
-            File fileToZip = new File(sourceDir);
-            zipFile(fileToZip, fileToZip.getName(), zipOut);
-            zipOut.close();
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "导出失败";
-        }
-        return "导出成功";
     }
 
     private void zipFile(File fileToZip, String fileName, ZipOutputStream zipOut) throws Exception {
@@ -348,8 +379,5 @@ public class CollectController {
                 zipOut.write(bytes, 0, length);
             }
             fis.close();
-
     }
-
-
 }

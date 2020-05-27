@@ -1,9 +1,6 @@
 package com.mju.video.service.impl;
 
-import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.digest.DigestUtil;
-import cn.hutool.crypto.symmetric.AES;
-import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import com.mju.video.domain.User;
 import com.mju.video.mapper.UserMapper;
 import com.mju.video.service.UserService;

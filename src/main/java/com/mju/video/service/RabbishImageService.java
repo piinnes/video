@@ -15,4 +15,12 @@ public interface RabbishImageService {
     void delectRabbishImageById(Integer imgId) throws IOException;
 
     void delectRabbishImageByCollectId(Integer collectId);
+
+    List<RabbishImage> findImagesByCollectId(Integer collectId);
+
+    void delectRabbishImageByRabbishId(Integer rabbishId);
+
+    List<RabbishImage> findImagesByRabbishId(Integer rabbishId);
+
+    void update(Integer srcCollectId, Integer destCollectId);
 }

@@ -6,7 +6,8 @@ import java.util.Date;
 @Table(name = "collect")
 public class Collect {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "JDBC")
     @Column(name = "id")
     private Integer id;
     @Column(name = "name")

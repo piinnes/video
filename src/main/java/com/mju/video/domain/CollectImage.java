@@ -16,7 +16,7 @@ public class CollectImage {
     private Integer collectId;
     @Column(name = "create_time")
     private Date createTime;
-    @Column(name = "rabbish_id")
+    @Column(name = "rubbish_id")
     private Integer rabbishId;
     @Transient
     private Collect collect;

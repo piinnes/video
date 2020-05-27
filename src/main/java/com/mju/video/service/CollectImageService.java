@@ -25,7 +25,7 @@ public interface CollectImageService {
      * @param collectId
      * @return
      */
-    void deleteImageByCollectId(Integer collectId);
+    void deleteCollectImageByCollectId(Integer collectId);
 
     /**
      * 查找该次采集下的所有图片
@@ -52,4 +52,8 @@ public interface CollectImageService {
      * @param destCollectId
      */
     void update(String srcUrl,String destUrl, Integer destCollectId);
+
+    void deleteCollectImageByRabbishId(Integer rabbishId);
+
+    List<CollectImage> findImagesByRabbishId(Integer rabbishId);
 }

@@ -13,8 +13,11 @@ import java.util.Date;
 
 public class Base64Util {
 
+    private Base64Util(){
+    }
+
     public static Result saveBase64(String imagePath,String base64Str){
-        StringBuffer fileName = new StringBuffer();
+        StringBuilder fileName = new StringBuilder();
         SimpleDateFormat s = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         fileName.append(s.format(new Date()));
         if (StringUtils.isBlank(base64Str)) {
@@ -45,9 +48,18 @@ public class Base64Util {
         if(osname.toLowerCase().startsWith("win")){
             imagePath = "D:/image/";
         }else {
-            imagePath = "/Users/work/images/";
+            imagePath = "/users/work/images/";
         }
         return imagePath;
+    }
+
+    public static boolean isWin(){
+        String osname = System.getProperty("os.name");
+        if(osname.toLowerCase().startsWith("win")){
+            return true;
+        }else {
+            return false;
+        }
     }
 }
 

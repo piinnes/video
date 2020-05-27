@@ -3,10 +3,14 @@ package com.mju.video.service.impl;
 import com.mju.video.domain.Collect;
 import com.mju.video.domain.CollectImage;
 import com.mju.video.domain.Rabbish;
+import com.mju.video.domain.RabbishImage;
 import com.mju.video.mapper.CollectImageMapper;
 import com.mju.video.mapper.CollectMapper;
+import com.mju.video.mapper.RabbishImageMapper;
 import com.mju.video.mapper.RabbishMapper;
 import com.mju.video.service.CollectImageService;
+import com.mju.video.service.RabbishImageService;
+import com.mju.video.utils.Base64Util;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +25,8 @@ import java.util.List;
 public class CollectImageServiceImpl implements CollectImageService {
     @Autowired
     private CollectImageMapper collectImageMapper;
+    @Autowired
+    private RabbishImageMapper rabbishImageMapper;
     @Autowired
     private CollectMapper collectMapper;
     @Autowired
@@ -45,7 +51,7 @@ public class CollectImageServiceImpl implements CollectImageService {
 
     @Override
     @Transactional
-    public void deleteImageByCollectId(Integer collectId) {
+    public void deleteCollectImageByCollectId(Integer collectId) {
         Example example = new Example(CollectImage.class);
         example.createCriteria().andEqualTo("collectId", collectId);
         collectImageMapper.deleteByExample(example);
@@ -68,10 +74,26 @@ public class CollectImageServiceImpl implements CollectImageService {
 //      CollectImage collectImage = collectImageMapper.selectByPrimaryKey(imgId);
 //      collectImage.setState(-1);
 //      collectImageMapper.updateByPrimaryKeySelective(collectImage);
+        //删除collectImage图片
         CollectImage collectImage = collectImageMapper.selectByPrimaryKey(imgId);
-        File file = new File("D:"+collectImage.getUrl());
-        FileUtils.forceDelete(file);
+        File collectImageFile;
+        if (Base64Util.isWin()){
+            collectImageFile = new File("D:"+collectImage.getUrl());
+        }else {
+            collectImageFile = new File(collectImage.getUrl());
+        }
+        FileUtils.forceDelete(collectImageFile);
         collectImageMapper.deleteByPrimaryKey(imgId);
+        //删除rabbishImage图片
+        RabbishImage rabbishImage = rabbishImageMapper.selectByPrimaryKey(imgId);
+        File rabbishImageFile;
+        if (Base64Util.isWin()){
+            rabbishImageFile = new File("D:"+rabbishImage.getUrl());
+        }else {
+            rabbishImageFile = new File(rabbishImage.getUrl());
+        }
+        FileUtils.forceDelete(rabbishImageFile);
+        rabbishImageMapper.deleteByPrimaryKey(imgId);
     }
 
     @Override
@@ -93,5 +115,20 @@ public class CollectImageServiceImpl implements CollectImageService {
         collectImage.setUrl(destUrl);
         collectImage.setCollectId(destCollectId);
         collectImageMapper.updateByPrimaryKeySelective(collectImage);
+    }
+
+    @Override
+    public void deleteCollectImageByRabbishId(Integer rabbishId) {
+        Example example = new Example(CollectImage.class);
+        example.createCriteria().andEqualTo("rabbishId", rabbishId);
+        collectImageMapper.deleteByExample(example);
+    }
+
+    @Override
+    public List<CollectImage> findImagesByRabbishId(Integer rabbishId) {
+        Example example = new Example(CollectImage.class);
+        example.createCriteria().andEqualTo("rabbishId", rabbishId);
+        List<CollectImage> collectImageList = collectImageMapper.selectByExample(example);
+        return collectImageList;
     }
 }

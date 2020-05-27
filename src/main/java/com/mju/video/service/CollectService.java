@@ -29,5 +29,5 @@ public interface CollectService {
 
     Collect findOneByName(String name);
 
-    List<Collect> findByLikeName(String likeName);
+    PageInfo<Collect> getCollectByCondition(Integer pageNum,Integer pageSize,String likeName, long[] timestamp, Integer operate, Integer total);
 }
